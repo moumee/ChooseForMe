@@ -160,7 +160,8 @@ TextureImporter:
     secondaryTextures: []
     spriteCustomMetadata:
       entries: []
-    nameFileIdTable: {}
+    nameFileIdTable:
+      levelup_unlocked_title_0: 2183371473311386943
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

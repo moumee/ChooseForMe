@@ -360,7 +360,16 @@ TextureImporter:
     secondaryTextures: []
     spriteCustomMetadata:
       entries: []
-    nameFileIdTable: {}
+    nameFileIdTable:
+      btn_icon_menu_1_0: -5409979162853972433
+      btn_icon_menu_1_1: -6297926513119766927
+      btn_icon_menu_1_2: 4137505846910256749
+      btn_icon_menu_1_3: 2953674667039875156
+      btn_icon_menu_1_4: -160820600064141758
+      btn_icon_menu_1_5: 7486525682223307330
+      btn_icon_menu_1_6: 8176570975337098035
+      btn_icon_menu_1_7: -1802726777164881575
+      btn_icon_menu_1_8: -1346221846645239425
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

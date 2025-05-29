@@ -160,7 +160,8 @@ TextureImporter:
     secondaryTextures: []
     spriteCustomMetadata:
       entries: []
-    nameFileIdTable: {}
+    nameFileIdTable:
+      mission_clear_badge_0: -5805546130196043596
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

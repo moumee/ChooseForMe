@@ -210,7 +210,10 @@ TextureImporter:
     secondaryTextures: []
     spriteCustomMetadata:
       entries: []
-    nameFileIdTable: {}
+    nameFileIdTable:
+      btn_icon_alarm_0: 6030268665523717864
+      btn_icon_alarm_1: -4279720387975111526
+      btn_icon_alarm_2: 7985082877648056531
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

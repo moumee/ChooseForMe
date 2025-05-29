@@ -160,7 +160,8 @@ TextureImporter:
     secondaryTextures: []
     spriteCustomMetadata:
       entries: []
-    nameFileIdTable: {}
+    nameFileIdTable:
+      btn_icon_helmet_0: 6459419662109739928
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

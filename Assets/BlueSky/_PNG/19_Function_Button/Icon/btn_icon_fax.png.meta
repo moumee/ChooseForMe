@@ -185,7 +185,9 @@ TextureImporter:
     secondaryTextures: []
     spriteCustomMetadata:
       entries: []
-    nameFileIdTable: {}
+    nameFileIdTable:
+      btn_icon_fax_0: -440291888106617807
+      btn_icon_fax_1: 9058721990042571266
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

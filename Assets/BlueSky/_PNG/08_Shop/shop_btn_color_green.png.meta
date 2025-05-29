@@ -160,7 +160,8 @@ TextureImporter:
     secondaryTextures: []
     spriteCustomMetadata:
       entries: []
-    nameFileIdTable: {}
+    nameFileIdTable:
+      shop_btn_color_green_0: 6347684205737604235
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

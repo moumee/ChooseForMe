@@ -285,7 +285,13 @@ TextureImporter:
     secondaryTextures: []
     spriteCustomMetadata:
       entries: []
-    nameFileIdTable: {}
+    nameFileIdTable:
+      btn_icon_category_0: -3815211047563171557
+      btn_icon_category_1: -1575253189347318273
+      btn_icon_category_2: -4297095860599508630
+      btn_icon_category_3: 5310994353231448527
+      btn_icon_category_4: 3609357986751197795
+      btn_icon_category_5: -4868809976862920923
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

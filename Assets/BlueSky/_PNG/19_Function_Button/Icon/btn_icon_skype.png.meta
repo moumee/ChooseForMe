@@ -160,7 +160,8 @@ TextureImporter:
     secondaryTextures: []
     spriteCustomMetadata:
       entries: []
-    nameFileIdTable: {}
+    nameFileIdTable:
+      btn_icon_skype_0: -2171109587288625699
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

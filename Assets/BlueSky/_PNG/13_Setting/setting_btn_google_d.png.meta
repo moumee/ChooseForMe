@@ -160,7 +160,8 @@ TextureImporter:
     secondaryTextures: []
     spriteCustomMetadata:
       entries: []
-    nameFileIdTable: {}
+    nameFileIdTable:
+      setting_btn_google_d_0: -5706445215032788126
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

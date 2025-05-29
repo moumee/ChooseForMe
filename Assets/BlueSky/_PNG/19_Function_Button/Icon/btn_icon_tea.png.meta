@@ -235,7 +235,11 @@ TextureImporter:
     secondaryTextures: []
     spriteCustomMetadata:
       entries: []
-    nameFileIdTable: {}
+    nameFileIdTable:
+      btn_icon_tea_0: -5370875380674998471
+      btn_icon_tea_1: -7281833360519082701
+      btn_icon_tea_2: -1160018663250834517
+      btn_icon_tea_3: 8857257118316194458
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

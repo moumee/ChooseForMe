@@ -210,7 +210,10 @@ TextureImporter:
     secondaryTextures: []
     spriteCustomMetadata:
       entries: []
-    nameFileIdTable: {}
+    nameFileIdTable:
+      btn_icon_wifi_0: 3846858358387042498
+      btn_icon_wifi_1: 7586472565791435275
+      btn_icon_wifi_2: 2674130495157096391
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

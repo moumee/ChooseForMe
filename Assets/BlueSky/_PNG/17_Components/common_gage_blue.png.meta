@@ -160,7 +160,8 @@ TextureImporter:
     secondaryTextures: []
     spriteCustomMetadata:
       entries: []
-    nameFileIdTable: {}
+    nameFileIdTable:
+      common_gage_blue_0: 2751309220461329647
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

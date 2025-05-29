@@ -160,7 +160,8 @@ TextureImporter:
     secondaryTextures: []
     spriteCustomMetadata:
       entries: []
-    nameFileIdTable: {}
+    nameFileIdTable:
+      shop_popup_bg_sky_0: -3149616272472793745
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

@@ -160,7 +160,8 @@ TextureImporter:
     secondaryTextures: []
     spriteCustomMetadata:
       entries: []
-    nameFileIdTable: {}
+    nameFileIdTable:
+      btn_icon_thunder_0: 6316134850870864794
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

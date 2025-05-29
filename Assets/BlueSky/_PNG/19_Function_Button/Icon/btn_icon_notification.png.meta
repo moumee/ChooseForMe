@@ -185,7 +185,9 @@ TextureImporter:
     secondaryTextures: []
     spriteCustomMetadata:
       entries: []
-    nameFileIdTable: {}
+    nameFileIdTable:
+      btn_icon_notification_0: 2942952769828362962
+      btn_icon_notification_1: -8697388217759342812
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 
