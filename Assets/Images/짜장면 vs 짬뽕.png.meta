@@ -1,10 +1,22 @@
 fileFormatVersion: 2
-guid: a87d447ffe08afd42831d9a8fc4c06aa
+guid: 4dd36551c445c9a4d8a524f230261a4d
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: 4433539168102762298
-    second: Home_0
+      213: 8638852905734951484
+    second: "\uC9DC\uC7A5\uBA74 vs \uC9EC\uBF55_0"
+  - first:
+      213: -3766566554626335115
+    second: "\uC9DC\uC7A5\uBA74 vs \uC9EC\uBF55_1"
+  - first:
+      213: -8527164897711931713
+    second: "\uC9DC\uC7A5\uBA74 vs \uC9EC\uBF55_2"
+  - first:
+      213: -8111203881652481587
+    second: "\uC9DC\uC7A5\uBA74 vs \uC9EC\uBF55_3"
+  - first:
+      213: -2131358053296452498
+    second: "\uC9DC\uC7A5\uBA74 vs \uC9EC\uBF55_4"
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -46,7 +58,7 @@ TextureImporter:
   nPOTScale: 0
   lightmap: 0
   compressionQuality: 50
-  spriteMode: 2
+  spriteMode: 1
   spriteExtrude: 1
   spriteMeshType: 1
   alignment: 0
@@ -139,13 +151,13 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: Home_0
+      name: "\uC9DC\uC7A5\uBA74 vs \uC9EC\uBF55_0"
       rect:
         serializedVersion: 2
-        x: 15
-        y: 7
-        width: 162
-        height: 178
+        x: 0
+        y: 0
+        width: 61
+        height: 20
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -154,8 +166,96 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: a37cb8c2268178d30800000000000000
-      internalID: 4433539168102762298
+      spriteID: c32de2972fe53e770800000000000000
+      internalID: 8638852905734951484
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: "\uC9DC\uC7A5\uBA74 vs \uC9EC\uBF55_1"
+      rect:
+        serializedVersion: 2
+        x: 89
+        y: 0
+        width: 13
+        height: 14
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 57e51a8bca77abbc0800000000000000
+      internalID: -3766566554626335115
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: "\uC9DC\uC7A5\uBA74 vs \uC9EC\uBF55_2"
+      rect:
+        serializedVersion: 2
+        x: 101
+        y: 0
+        width: 12
+        height: 14
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: fbe33b254bc69a980800000000000000
+      internalID: -8527164897711931713
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: "\uC9DC\uC7A5\uBA74 vs \uC9EC\uBF55_3"
+      rect:
+        serializedVersion: 2
+        x: 140
+        y: 0
+        width: 23
+        height: 20
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: dc1955d6b073f6f80800000000000000
+      internalID: -8111203881652481587
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: "\uC9DC\uC7A5\uBA74 vs \uC9EC\uBF55_4"
+      rect:
+        serializedVersion: 2
+        x: 161
+        y: 0
+        width: 19
+        height: 20
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: e6cc8189425eb62e0800000000000000
+      internalID: -2131358053296452498
       vertices: []
       indices: 
       edges: []
@@ -164,7 +264,7 @@ TextureImporter:
     customData: 
     physicsShape: []
     bones: []
-    spriteID: 
+    spriteID: 5e97eb03825dee720800000000000000
     internalID: 0
     vertices: []
     indices: 
@@ -174,7 +274,11 @@ TextureImporter:
     spriteCustomMetadata:
       entries: []
     nameFileIdTable:
-      Home_0: 4433539168102762298
+      "\uC9DC\uC7A5\uBA74 vs \uC9EC\uBF55_0": 8638852905734951484
+      "\uC9DC\uC7A5\uBA74 vs \uC9EC\uBF55_1": -3766566554626335115
+      "\uC9DC\uC7A5\uBA74 vs \uC9EC\uBF55_2": -8527164897711931713
+      "\uC9DC\uC7A5\uBA74 vs \uC9EC\uBF55_3": -8111203881652481587
+      "\uC9DC\uC7A5\uBA74 vs \uC9EC\uBF55_4": -2131358053296452498
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 
