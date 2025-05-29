@@ -6,6 +6,7 @@ public enum PanelType
     Home,
     MyVote,
     OtherVote,
+    CreateVote,
     Menu,
     Login,
     MyPage
@@ -21,6 +22,7 @@ public class PanelManager : MonoBehaviour
     [SerializeField] private GameObject menuPanel;
     [SerializeField] private GameObject loginPanel;
     [SerializeField] private GameObject myPagePanel;
+    [SerializeField] private GameObject createVotePanel;
     void Awake()
     {
         if (!Instance)
@@ -35,17 +37,13 @@ public class PanelManager : MonoBehaviour
         DisableAllPanels();
         loginPanel.SetActive(true);
     }
-
-    void Update()
-    {
-        
-    }
-
+    
     void DisableAllPanels()
     {
         homePanel.SetActive(false);
         myVotePanel.SetActive(false);
         otherVotePanel.SetActive(false);
+        createVotePanel.SetActive(false);
         menuPanel.SetActive(false);
         loginPanel.SetActive(false);
         myPagePanel.SetActive(false);
@@ -64,6 +62,9 @@ public class PanelManager : MonoBehaviour
                 break;
             case PanelType.OtherVote:
                 otherVotePanel.SetActive(true);
+                break;
+            case PanelType.CreateVote:
+                createVotePanel.SetActive(true);
                 break;
             case PanelType.Menu:
                 menuPanel.SetActive(true);
