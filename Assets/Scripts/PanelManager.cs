@@ -48,7 +48,7 @@ public class PanelManager : MonoBehaviour
         otherVotePanel.SetActive(false);
         menuPanel.SetActive(false);
         loginPanel.SetActive(false);
-        // myPagePanel.SetActive(false);
+        myPagePanel.SetActive(false);
     }
 
     public void EnablePanel(PanelType panelType)
