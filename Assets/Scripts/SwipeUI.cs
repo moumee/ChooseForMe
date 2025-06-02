@@ -7,7 +7,7 @@ public class SwipeUI : MonoBehaviour, IEndDragHandler
     public ScrollRect scrollRect;
     public RectTransform contentPanel;
     public float itemHeight; // Height of each content item
-    public float snapThresholdVelocity = 500f; // Velocity needed to move to next/prev item
+    public float snapThresholdVelocity = 10f; // Velocity needed to move to next/prev item
     public float snapSpeed = 10f;
 
     private int itemCount;
