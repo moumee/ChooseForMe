@@ -70,6 +70,11 @@ sysinfo.txt
 # Crashlytics generated file
 crashlytics-build.properties
 
+# Firebase native binaries (over 100MB)
+Assets/Firebase/Plugins/x86_64/
+Assets/Firebase/Plugins/Android/
+Assets/Firebase/Plugins/iOS/
+
 # Packed Addressables
 /[Aa]ssets/[Aa]ddressable[Aa]ssets[Dd]ata/*/*.bin*
 
