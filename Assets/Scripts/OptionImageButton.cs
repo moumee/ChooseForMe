@@ -26,11 +26,11 @@ public class OptionImageButton : MonoBehaviour, IPointerDownHandler, IPointerUpH
     {
         if (_swipePage.CurrentState == SwipePageState.Initial)
         {
-            // Go to prediction vote using function in VoteSwipePage
+            _swipePage.SwitchToPredictionVote();
         }
         else if (_swipePage.CurrentState == SwipePageState.Prediction)
         {
-            // Go to result using function in VoteSwipePage
+            _swipePage.SwitchToResult();
         }
     }
 
