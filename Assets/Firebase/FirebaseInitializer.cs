@@ -1,31 +1,21 @@
 using Firebase;
-using Firebase.Extensions;
 using UnityEngine;
+using System.Threading.Tasks;
 
 public class FirebaseInitializer : MonoBehaviour
 {
-
-    private void Awake()
+    public async Task<bool> InitializeFirebaseAsync()
     {
-        if (FindObjectsByType<FirebaseInitializer>(FindObjectsSortMode.None).Length > 1)
+        var dependencyStatus = await FirebaseApp.CheckAndFixDependenciesAsync();
+        if (dependencyStatus == DependencyStatus.Available)
         {
-            Destroy(gameObject);  // 이미 있으면 삭제
-            return;
+            Debug.Log("Firebase 초기화 준비 완료.");
+            return true;
         }
-        DontDestroyOnLoad(gameObject);
-    }
-    void Start()
-    {
-        FirebaseApp.CheckAndFixDependenciesAsync().ContinueWithOnMainThread(task =>
+        else
         {
-            if (task.Result == DependencyStatus.Available)
-            {
-                Debug.Log("Firebase 초기화 완료");
-            }
-            else
-            {
-                Debug.LogError($"Firebase 초기화 실패: {task.Result}");
-            }
-        });
+            Debug.LogError($"Firebase 초기화 실패: Status: {dependencyStatus}");
+            return false;
+        }
     }
 }
