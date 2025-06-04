@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "884190690429",
+    "project_id": "chooseforme-5c5c8",
+    "storage_bucket": "chooseforme-5c5c8.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:884190690429:android:ff09120d246c95f9104514",
+        "android_client_info": {
+          "package_name": "com.example.chooseforme"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBmYOGWVSxFTH-q-FQ_ORM6qnfdXhvQXvI"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
