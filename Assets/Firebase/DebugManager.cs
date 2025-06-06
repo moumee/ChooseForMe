@@ -1,9 +1,14 @@
 using UnityEngine;
 using System.Threading.Tasks;
 using System.Collections.Generic;
+using UnityEngine.UI;
 
 public class DebugManager : MonoBehaviour
 {
+    [Header("버튼 연결")]
+    public Button showProfilePanelButton;
+    [Header("관리할 패널 연결")]
+    public GameObject profilePanel; // 활성화시킬 프로필 패널
 
     private ProfileManager _profileManager;
     private LeaderboardManager _leaderboardManager; // LeaderboardManager 참조 추가
@@ -18,6 +23,7 @@ public class DebugManager : MonoBehaviour
         {
             Debug.LogError("DebugManager: ProfileManager를 찾을 수 없습니다! 같은 GameObject에 있는지 확인해주세요.");
         }
+        if (showProfilePanelButton != null) showProfilePanelButton.onClick.AddListener(OnShowProfilePanelClicked);
     }
 
     /// <summary>
@@ -94,5 +100,19 @@ public class DebugManager : MonoBehaviour
         Debug.Log("테스트: 점수 5 추가 요청...");
         await _profileManager.AddScoreAsync(5);
     }
-
+    /// <summary>
+    /// '프로필 보기' 버튼에 연결할 메소드입니다.
+    /// </summary>
+    public void OnShowProfilePanelClicked()
+    {
+        if (profilePanel != null)
+        {
+            Debug.Log("프로필 패널을 활성화합니다.");
+            profilePanel.SetActive(true);
+        }
+        else
+        {
+            Debug.LogError("Profile Panel이 DebugManager에 연결되지 않았습니다!");
+        }
+    }
 }

@@ -193,4 +193,95 @@ public class ProfileManager : MonoBehaviour
 
         if (nicknameSetupUI != null) nicknameSetupUI.SetActive(false);
     }
+
+    /// <summary>
+    /// 특정 UID를 가진 사용자의 닉네임을 가져옵니다.
+    /// </summary>
+    /// <param name="uid">정보를 조회할 사용자의 UID</param>
+    /// <returns>사용자 닉네임. 문서나 필드가 없으면 null을 반환합니다.</returns>
+    public async Task<string> GetUserNicknameAsync(string uid)
+    {
+        if (string.IsNullOrEmpty(uid)) return null;
+
+        DocumentReference userDocRef = _db.Collection("users").Document(uid);
+        try
+        {
+            DocumentSnapshot snapshot = await userDocRef.GetSnapshotAsync();
+            if (snapshot.Exists && snapshot.ContainsField("nickname"))
+            {
+                return snapshot.GetValue<string>("nickname");
+            }
+            else
+            {
+                Debug.LogWarning($"해당 UID({uid})의 문서나 nickname 필드가 없습니다.");
+                return null;
+            }
+        }
+        catch (Exception e)
+        {
+            Debug.LogError($"닉네임 조회 중 오류 발생: {e.Message}");
+            return null;
+        }
+    }
+
+    /// <summary>
+    /// 특정 UID를 가진 사용자의 레벨을 가져옵니다.
+    /// </summary>
+    /// <param name="uid">정보를 조회할 사용자의 UID</param>
+    /// <returns>사용자 레벨. 문서나 필드가 없으면 -1을 반환합니다.</returns>
+    public async Task<int> GetUserLevelAsync(string uid)
+    {
+        if (string.IsNullOrEmpty(uid)) return -1;
+
+        DocumentReference userDocRef = _db.Collection("users").Document(uid);
+        try
+        {
+            DocumentSnapshot snapshot = await userDocRef.GetSnapshotAsync();
+            if (snapshot.Exists && snapshot.ContainsField("level"))
+            {
+                // Firestore의 number는 long 타입으로 받는 것이 안전합니다.
+                return Convert.ToInt32(snapshot.GetValue<long>("level"));
+            }
+            else
+            {
+                Debug.LogWarning($"해당 UID({uid})의 문서나 level 필드가 없습니다.");
+                return -1;
+            }
+        }
+        catch (Exception e)
+        {
+            Debug.LogError($"레벨 조회 중 오류 발생: {e.Message}");
+            return -1;
+        }
+    }
+
+    /// <summary>
+    /// 특정 UID를 가진 사용자의 점수를 가져옵니다.
+    /// </summary>
+    /// <param name="uid">정보를 조회할 사용자의 UID</param>
+    /// <returns>사용자 점수. 문서나 필드가 없으면 -1을 반환합니다.</returns>
+    public async Task<int> GetUserScoreAsync(string uid)
+    {
+        if (string.IsNullOrEmpty(uid)) return -1;
+
+        DocumentReference userDocRef = _db.Collection("users").Document(uid);
+        try
+        {
+            DocumentSnapshot snapshot = await userDocRef.GetSnapshotAsync();
+            if (snapshot.Exists && snapshot.ContainsField("score"))
+            {
+                return Convert.ToInt32(snapshot.GetValue<long>("score"));
+            }
+            else
+            {
+                Debug.LogWarning($"해당 UID({uid})의 문서나 score 필드가 없습니다.");
+                return -1;
+            }
+        }
+        catch (Exception e)
+        {
+            Debug.LogError($"점수 조회 중 오류 발생: {e.Message}");
+            return -1;
+        }
+    }
 }
