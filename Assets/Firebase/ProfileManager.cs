@@ -148,6 +148,25 @@ public class ProfileManager : MonoBehaviour
     }
 
     /// <summary>
+    /// [기능 2] 지정된 양의 점수를 추가합니다.
+    public async Task AddScoreAsync(int scoreToAdd)
+    {
+        if (string.IsNullOrEmpty(_uid)) throw new Exception("UID가 설정되지 않았습니다.");
+
+        DocumentReference userDocRef = _db.Collection("users").Document(_uid);
+
+        // FieldValue.Increment()를 사용하여 점수만 안전하게 증가시킵니다.
+        var updates = new Dictionary<string, object>
+        {
+            { "score", FieldValue.Increment(scoreToAdd) }
+        };
+
+        await userDocRef.UpdateAsync(updates);
+        Debug.Log($"점수 {scoreToAdd} 추가 완료.");
+    }
+
+
+    /// <summary>
     /// '닉네임 결정' 버튼의 OnClick() 이벤트에 연결할 메소드입니다.
     /// </summary>
     public async void OnConfirmNicknameClicked()
