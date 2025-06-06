@@ -1,6 +1,7 @@
 using System.Collections;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.EventSystems;
 
 
 public class HomePanel : MonoBehaviour
@@ -58,14 +59,19 @@ public class HomePanel : MonoBehaviour
     {
         if (_isSwipeMode) return;
     
-        if (Input.GetMouseButtonDown(0))
+        if (Input.GetMouseButtonDown(0) && !Comments.PointerOnComment)
         {
             _startTouchY = Input.mousePosition.y;
         }
         else if (Input.GetMouseButtonUp(0))
         {
-            _endTouchY = Input.mousePosition.y;
-            UpdateSwipe();
+            if (_startTouchY != 0)
+            {
+                _endTouchY = Input.mousePosition.y;
+                UpdateSwipe();
+                _startTouchY = 0;
+            }
+           
         }
     }
     

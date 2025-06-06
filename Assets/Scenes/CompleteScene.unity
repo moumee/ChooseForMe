@@ -16747,6 +16747,7 @@ GameObject:
   - component: {fileID: 2086647807}
   - component: {fileID: 2086647809}
   - component: {fileID: 2086647808}
+  - component: {fileID: 2086647810}
   m_Layer: 5
   m_Name: MyPagePanel
   m_TagString: Untagged
@@ -16813,6 +16814,21 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2086647806}
   m_CullTransparentMesh: 1
+--- !u!114 &2086647810
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2086647806}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2702374a179cf7f4b8a87ac753c4cb44, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  username: {fileID: 0}
+  level: {fileID: 0}
+  score: {fileID: 0}
 --- !u!1 &2099583424
 GameObject:
   m_ObjectHideFlags: 0
