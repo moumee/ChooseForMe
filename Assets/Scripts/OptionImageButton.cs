@@ -3,9 +3,19 @@ using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
+using DG.Tweening;
 
 public class OptionImageButton : MonoBehaviour, IPointerDownHandler, IPointerUpHandler, IBeginDragHandler, IDragHandler, IEndDragHandler
 {
+    
+    private float _scaleDownFactor = 0.85f;
+    private float _animationDuration = 0.12f;
+
+    private Vector3 _originalScale;
+    private Color _originalColor;
+    private Sequence _pressAnimation;
+    private Image _image;
+    
     private const float DragThreshold = 10.0f;
     public UnityEvent onClick;
 
@@ -17,9 +27,14 @@ public class OptionImageButton : MonoBehaviour, IPointerDownHandler, IPointerUpH
 
     private void Awake()
     {
+        _image = GetComponent<Image>();
         _parentScrollRect = GetComponentInParent<ScrollRect>();
         _swipePage = GetComponentInParent<VoteSwipePage>();
-        onClick.AddListener(OnImageButtonClick);
+        
+        // onClick.AddListener(OnImageButtonClick);
+
+        _originalScale = transform.localScale;
+        _originalColor = _image.color;
     }
 
     private void OnImageButtonClick()
@@ -36,6 +51,18 @@ public class OptionImageButton : MonoBehaviour, IPointerDownHandler, IPointerUpH
 
     public void OnPointerDown(PointerEventData eventData)
     {
+        if (_pressAnimation != null && _pressAnimation.IsActive())
+        {
+            _pressAnimation.Kill();
+        }
+        
+        Color pressColor = new Color(_originalColor.r * 0.8f, _originalColor.g * 0.8f, _originalColor.b * 0.8f, _originalColor.a);
+        
+        _pressAnimation = DOTween.Sequence();
+        _pressAnimation.Append(transform.DOScale(_originalScale * _scaleDownFactor, _animationDuration))
+            .Join(_image.DOColor(pressColor, _animationDuration));
+        
+        
         _isDragging = false;
         _pointerDownPosition = eventData.position;
 
@@ -62,9 +89,18 @@ public class OptionImageButton : MonoBehaviour, IPointerDownHandler, IPointerUpH
     
     public void OnPointerUp(PointerEventData eventData)
     {
+        if (_pressAnimation != null && _pressAnimation.IsActive())
+        {
+            _pressAnimation.Kill();
+        }
+        
+        _pressAnimation = DOTween.Sequence();
+        _pressAnimation.Append(transform.DOScale(_originalScale, _animationDuration));
+
+        _image.DOColor(_originalColor, _animationDuration).OnComplete(OnImageButtonClick);
+        
         if (!_isDragging)
         {
-            Debug.Log("onClick Invoked!");
             onClick?.Invoke();
         }
 

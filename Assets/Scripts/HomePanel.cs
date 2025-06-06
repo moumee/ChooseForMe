@@ -116,16 +116,6 @@ public class HomePanel : MonoBehaviour
         
         _isSwipeMode = false;
     }
-
-    public void OnFirstVoteClick()
-    {
-        
-    }
-
-    public void OnSecondVoteClick()
-    {
-        
-    }
     
     
     private void OnCreateVoteButtonClick()
