@@ -9,7 +9,7 @@ using System.IO;
 using System.Collections.Generic;
 
 
-public class CreateVoteManager : MonoBehaviour
+public class CreateAndUploadVote : MonoBehaviour
 {
     //UI input fields for title and two voting options and dropdown category
     public InputField titleInput;
