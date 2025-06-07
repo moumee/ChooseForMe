@@ -1,0 +1,166 @@
+using UnityEngine;
+using UnityEngine.UI;
+using Firebase;
+using Firebase.Extensions;
+using Firebase.Storage;
+using Firebase.Firestore;
+using System;
+using System.IO;
+using System.Collections.Generic;
+
+
+public class CreateVoteManager : MonoBehaviour
+{
+    //UI input fields for title and two voting options and dropdown category
+    public InputField titleInput;
+    public InputField option1Input;
+    public InputField option2Input;
+    public Dropdown categoryDropdown;
+    //UI buttons to pick images and upload the vote
+    public Button image1Button;
+    public Button image2Button;
+    public Button uploadVoteButton;
+    //paths to selected images on device
+    private string image1Path = null;
+    private string image2Path = null;
+    //Firebase instances for Firestore(database) and Storage
+    FirebaseFirestore db;
+    FirebaseStorage storage;
+
+    void Start()
+    {
+        //Initialize Firebase Firestore and Storage
+        db = FirebaseFirestore.DefaultInstance;
+        storage = FirebaseStorage.DefaultInstance;
+
+        //Attach click listener to buttons
+        image1Button.onClick.AddListener(() => PickImageForOption(1));
+        image2Button.onClick.AddListener(() => PickImageForOption(2));
+        uploadVoteButton.onClick.AddListener(CreateVote);
+    }
+
+
+    //Method to let users pick an image from their device for one of the option
+    void PickImageForOption(int optionNumber)
+    {
+#if UNITY_ANDROID || UNITY_IOS
+        NativeGallery.GetImageFromGallery((path) =>
+        {
+            if (path != null)
+            {
+                if (optionNumber == 1)
+                    image1Path = path;
+                else
+                    image2Path = path;
+
+                Debug.Log($"Image selected for Option {optionNumber}: {path}");
+            }
+        },
+#else
+        Debug.LogWarning("Image picking only supported on mobile with NativeGallery");
+#endif
+
+    }
+
+    //When user presses "Upload Vote"
+    void CreateVote()
+    {
+        string title = titleInput.text;
+        string opt1 = option1Input.text;
+        string opt2 = option2Input.text;
+        string category = categoryDropdown.options[categoryDropdown.value].text;
+
+        //Vallidate that all text fields are filled
+        if (string.IsNullOrEmpty(title) || string.IsNullOrEmpty(opt1) || string.IsNullOrEmpty(opt2))
+        {
+            Debug.LogWarning("All fields must be filled out.");
+            return;
+        }
+
+        //start coroutine to uplload images (if any) and save the vote
+        StartCoroutine(UploadImagesAndSaveVote(title, opt1, opt2, category));
+    }
+
+    //coroutine to handle uploading images and saving vote data to Firestone
+    System.Collections.IEnumerator UploadImagesAndSaveVote(string title, string opt1, string opt2, string category)
+    {
+        string imageUrl1 = null;
+        string imageUrl2 = null;
+
+        //Upload image for option 1, if selected
+        if (image1Path != null)
+        {
+            yield return UploadImage(image1Path, url => imageUrl1 = url);
+        }
+        //Upload image for option 2, if selected
+        if (image2Path != null)
+        {
+            yield return UploadImage(image2Path, url => imageUrl2 = url);
+        }
+
+        //Build Firestone document data
+        Dictionary<string, object> voteData = new Dictionary<string, object>
+        {
+            {"title", title },
+            {"options", new[] {opt1, opt2} },
+            {"category", category },
+            {"CreatedAt", Timestamp.GetCurrentTimestamp() }
+        };
+
+        //If either image is uploaded, add their URLs under "optionImages"
+        if (imageUrl1 != null || imageUrl2 != null)
+        {
+            voteData["optionImages"] = new Dictionary<string, string>
+            {
+                {"0", imageUrl1 ?? "" },
+                {"1", imageUrl2 ?? "" }
+            };
+        }
+
+        //Add the document to the "votes" collection in Firestone
+        DocumentReference voteRef = db.Collection("votes").Document();
+        voteRef.SetAsync(voteData).ContinueWithOnMainThread(task =>
+        {
+            if (task.IsCompleted)
+                Debug.Log("Vote created Successfully!");
+            else
+                Debug.LogError("Error creating vote: " + task.Exception);
+        });
+    }
+
+    //Upload image to Firebase storage and gets a downloadable URL 
+    System.Collections.IEnumerator UploadImage(string path, Action<string> onComplete)
+    {
+        byte[] bytes = File.ReadAllBytes(path);     //Read image file as bytes
+        string fileName = Guid.NewGuid().ToString() + ".jpg";       //Generate unique filename
+        StorageReference imageRef = storage.GetReference($"voteImages/{fileName}");     //Storage path
+
+        var metadata = new MetadataChange { ContentType = "image/jpeg" };
+        var task = imageRef.PutBytesAsync(bytes, metadata);     //Upload image
+
+        yield return new WaitUntil(() => task.IsCompleted);     //Wait until upload finishes
+
+        if (task.IsFaulted || task.IsCanceled)
+        {
+            Debug.LogError("Image upload failed.");
+            onComplete(null);
+        }
+        else
+        {
+            var urlTask = imageRef.GetDownloadUrlAsync();       //Get public URL
+            yield return new WaitUntil(() => urlTask.IsCompleted);
+
+            if (!urlTask.IsFaulted && !urlTask.IsCanceled)
+                onComplete(urlTask.Result.ToString());          //Return the URL
+            else
+                onComplete(null);
+        }
+
+    }
+
+    // Update is called once per frame
+    void Update()
+    {
+
+    }
+}
