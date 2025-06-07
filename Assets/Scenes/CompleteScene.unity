@@ -11470,7 +11470,7 @@ RectTransform:
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
   m_AnchoredPosition: {x: 50, y: -50}
-  m_SizeDelta: {x: 226.98, y: 95.43}
+  m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0, y: 1}
 --- !u!114 &1439893056
 MonoBehaviour:
@@ -14213,6 +14213,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bbf7a54fe149fa64780bb4964c1c869b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  showProfilePanelButton: {fileID: 0}
+  profilePanel: {fileID: 0}
 --- !u!114 &1831768825
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -16748,13 +16750,14 @@ GameObject:
   - component: {fileID: 2086647809}
   - component: {fileID: 2086647808}
   - component: {fileID: 2086647810}
+  - component: {fileID: 2086647811}
   m_Layer: 5
   m_Name: MyPagePanel
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &2086647807
 RectTransform:
   m_ObjectHideFlags: 0
@@ -16829,6 +16832,22 @@ MonoBehaviour:
   username: {fileID: 0}
   level: {fileID: 0}
   score: {fileID: 0}
+--- !u!114 &2086647811
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2086647806}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a1cd8d24ad2cfa24d87eb070908e3419, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _nicknameText: {fileID: 385297901}
+  _levelText: {fileID: 1839985126}
+  _scoreText: {fileID: 982377867}
+  _profileManager: {fileID: 1831768826}
 --- !u!1 &2099583424
 GameObject:
   m_ObjectHideFlags: 0
