@@ -10,7 +10,6 @@ using TMPro;
 public class CreateVoteManager : MonoBehaviour
 {
     [Header("UI Elements")]
-    public TMP_InputField titleInput;
     public TMP_InputField option1Input;
     public TMP_InputField option2Input;
     public Button uploadVoteButton;
@@ -24,57 +23,55 @@ public class CreateVoteManager : MonoBehaviour
         _db = FirebaseFirestore.DefaultInstance;
         _auth = FirebaseAuth.DefaultInstance;
 
-        // ¹öÆ° ¸®½º³Ê ÇÒ´ç
+        // ï¿½ï¿½Æ° ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ò´ï¿½
         uploadVoteButton.onClick.AddListener(HandleCreateVoteClicked);
     }
 
     /// <summary>
-    /// UIÀÇ ÅõÇ¥ »ý¼º ¹öÆ° Å¬¸¯ ½Ã ¾ÈÀüÇÏ°Ô ºñµ¿±â ¸Þ¼Òµå¸¦ È£ÃâÇÏ´Â ÇÚµé·¯
+    /// UIï¿½ï¿½ ï¿½ï¿½Ç¥ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½Æ° Å¬ï¿½ï¿½ ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Ï°ï¿½ ï¿½ñµ¿±ï¿½ ï¿½Þ¼Òµå¸¦ È£ï¿½ï¿½ï¿½Ï´ï¿½ ï¿½Úµé·¯
     /// </summary>
     private void HandleCreateVoteClicked()
     {
-        // _= ´Â "ÀÌ ºñµ¿±â ÀÛ¾÷ÀÌ ³¡³¯ ¶§±îÁö ±â´Ù¸± ÇÊ¿ä´Â ¾ø´Ù"´Â ÀÇ¹ÌÀÇ ÃÖ½Å C# ¹®¹ýÀÔ´Ï´Ù.
-        // CreateVoteAsync ³»ºÎ¿¡¼­ ¸ðµç ¿¹¿Ü Ã³¸®¸¦ ´ã´çÇÕ´Ï´Ù.
+        // _= ï¿½ï¿½ "ï¿½ï¿½ ï¿½ñµ¿±ï¿½ ï¿½Û¾ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½Ù¸ï¿½ ï¿½Ê¿ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½"ï¿½ï¿½ ï¿½Ç¹ï¿½ï¿½ï¿½ ï¿½Ö½ï¿½ C# ï¿½ï¿½ï¿½ï¿½ï¿½Ô´Ï´ï¿½.
+        // CreateVoteAsync ï¿½ï¿½ï¿½Î¿ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ Ã³ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½Õ´Ï´ï¿½.
         _ = CreateVoteAsync();
     }
 
     /// <summary>
-    /// ÅØ½ºÆ® ±â¹ÝÀÇ ÅõÇ¥ ¹®¼­¸¦ Firestore¿¡ »ý¼ºÇÏ´Â ÇÙ½É ¸Þ¼Òµå
+    /// ï¿½Ø½ï¿½Æ® ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½Ç¥ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ Firestoreï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Ï´ï¿½ ï¿½Ù½ï¿½ ï¿½Þ¼Òµï¿½
     /// </summary>
     private async Task CreateVoteAsync()
     {
         FirebaseUser user = _auth.CurrentUser;
         if (user == null)
         {
-            Debug.LogError("·Î±×ÀÎµÇÁö ¾Ê¾Æ ÅõÇ¥¸¦ »ý¼ºÇÒ ¼ö ¾ø½À´Ï´Ù.");
+            Debug.LogError("ï¿½Î±ï¿½ï¿½Îµï¿½ï¿½ï¿½ ï¿½Ê¾ï¿½ ï¿½ï¿½Ç¥ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Ï´ï¿½.");
             return;
         }
-
-        string title = titleInput.text;
+        
         string opt1 = option1Input.text;
         string opt2 = option2Input.text;
 
-        if (string.IsNullOrEmpty(title) || string.IsNullOrEmpty(opt1) || string.IsNullOrEmpty(opt2))
+        if (string.IsNullOrEmpty(opt1) || string.IsNullOrEmpty(opt2))
         {
-            Debug.LogWarning("¸ðµç ÅØ½ºÆ® ÇÊµå¸¦ Ã¤¿ö¾ß ÇÕ´Ï´Ù.");
+            Debug.LogWarning("ï¿½ï¿½ï¿½ ï¿½Ø½ï¿½Æ® ï¿½Êµå¸¦ Ã¤ï¿½ï¿½ï¿½ï¿½ ï¿½Õ´Ï´ï¿½.");
             return;
         }
 
-        uploadVoteButton.interactable = false; // Áßº¹ Å¬¸¯ ¹æÁö
+        uploadVoteButton.interactable = false; // ï¿½ßºï¿½ Å¬ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
 
         try
         {
-            // 1. Firestore¿¡ ÀúÀåÇÒ µ¥ÀÌÅÍ ±¸Á¶ »ý¼º
-            // VoteManager¿ÍÀÇ ¿¬µ¿À» À§ÇØ ÇÊ¼öÀûÀÎ ÇÊµåµé¸¸ Æ÷ÇÔÇÕ´Ï´Ù.
+            // 1. Firestoreï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
+            // VoteManagerï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½Ê¼ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Êµï¿½é¸¸ ï¿½ï¿½ï¿½ï¿½ï¿½Õ´Ï´ï¿½.
             var pollData = new Dictionary<string, object>
             {
-                { "question", title },
                 { "options", new List<string> { opt1, opt2 } },
                 { "creatorUid", user.UserId },
                 { "createdAt", FieldValue.ServerTimestamp },
-                { "pollType", "ChoicePoll" }, // ¿ì¼± °íÁ¤
+                { "pollType", "ChoicePoll" }, // ï¿½ì¼± ï¿½ï¿½ï¿½ï¿½
                 
-                // VoteManager°¡ »ç¿ëÇÒ Ä«¿îÅÍ ÇÊµå¸¦ 0À¸·Î ÃÊ±âÈ­ÇÏ¿© »ý¼º
+                // VoteManagerï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ Ä«ï¿½ï¿½ï¿½ï¿½ ï¿½Êµå¸¦ 0ï¿½ï¿½ï¿½ï¿½ ï¿½Ê±ï¿½È­ï¿½Ï¿ï¿½ ï¿½ï¿½ï¿½ï¿½
                 { "totalVoteCount", 0 },
                 { "option1Votes", 0 },
                 { "option2Votes", 0 },
@@ -82,28 +79,27 @@ public class CreateVoteManager : MonoBehaviour
                 { "isClosed", false }
             };
 
-            // 2. 'polls' ÄÃ·º¼Ç¿¡ »õ·Î¿î ¹®¼­ Ãß°¡
+            // 2. 'polls' ï¿½Ã·ï¿½ï¿½Ç¿ï¿½ ï¿½ï¿½ï¿½Î¿ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ß°ï¿½
             await _db.Collection("polls").AddAsync(pollData);
 
-            Debug.Log("±âº» ÅõÇ¥°¡ ¼º°øÀûÀ¸·Î »ý¼ºµÇ¾ú½À´Ï´Ù!");
+            Debug.Log("ï¿½âº» ï¿½ï¿½Ç¥ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Ç¾ï¿½ï¿½ï¿½ï¿½Ï´ï¿½!");
             ClearInputFields();
         }
         catch (Exception e)
         {
-            Debug.LogError($"ÅõÇ¥ »ý¼º ½ÇÆÐ: {e.Message}");
+            Debug.LogError($"ï¿½ï¿½Ç¥ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½: {e.Message}");
         }
         finally
         {
-            uploadVoteButton.interactable = true; // ¹öÆ° ´Ù½Ã È°¼ºÈ­
+            uploadVoteButton.interactable = true; // ï¿½ï¿½Æ° ï¿½Ù½ï¿½ È°ï¿½ï¿½È­
         }
     }
 
     /// <summary>
-    /// ÀÛ¾÷ ¿Ï·á ÈÄ ÀÔ·Â ÇÊµå¸¦ ÃÊ±âÈ­ÇÏ´Â ¸Þ¼Òµå
+    /// ï¿½Û¾ï¿½ ï¿½Ï·ï¿½ ï¿½ï¿½ ï¿½Ô·ï¿½ ï¿½Êµå¸¦ ï¿½Ê±ï¿½È­ï¿½Ï´ï¿½ ï¿½Þ¼Òµï¿½
     /// </summary>
     private void ClearInputFields()
     {
-        titleInput.text = "";
         option1Input.text = "";
         option2Input.text = "";
     }

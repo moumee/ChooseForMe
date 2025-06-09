@@ -7,15 +7,14 @@ using Firebase.Firestore;
 using System;
 using System.IO;
 using System.Collections.Generic;
+using TMPro;
 
 
 public class CreateAndUploadVote : MonoBehaviour
 {
     //UI input fields for title and two voting options and dropdown category
-    public InputField titleInput;
-    public InputField option1Input;
-    public InputField option2Input;
-    public Dropdown categoryDropdown;
+    public TMP_InputField option1Input;
+    public TMP_InputField option2Input;
     //UI buttons to pick images and upload the vote
     public Button image1Button;
     public Button image2Button;
@@ -65,24 +64,22 @@ public class CreateAndUploadVote : MonoBehaviour
     //When user presses "Upload Vote"
     void CreateVote()
     {
-        string title = titleInput.text;
         string opt1 = option1Input.text;
         string opt2 = option2Input.text;
-        string category = categoryDropdown.options[categoryDropdown.value].text;
 
-        //Vallidate that all text fields are filled
-        if (string.IsNullOrEmpty(title) || string.IsNullOrEmpty(opt1) || string.IsNullOrEmpty(opt2))
+        //Validate that all text fields are filled
+        if (string.IsNullOrEmpty(opt1) || string.IsNullOrEmpty(opt2))
         {
             Debug.LogWarning("All fields must be filled out.");
             return;
         }
 
-        //start coroutine to uplload images (if any) and save the vote
-        StartCoroutine(UploadImagesAndSaveVote(title, opt1, opt2, category));
+        //start coroutine to upload images (if any) and save the vote
+        StartCoroutine(UploadImagesAndSaveVote(opt1, opt2));
     }
 
     //coroutine to handle uploading images and saving vote data to Firestone
-    System.Collections.IEnumerator UploadImagesAndSaveVote(string title, string opt1, string opt2, string category)
+    System.Collections.IEnumerator UploadImagesAndSaveVote(string opt1, string opt2)
     {
         string imageUrl1 = null;
         string imageUrl2 = null;
@@ -101,9 +98,7 @@ public class CreateAndUploadVote : MonoBehaviour
         //Build Firestone document data
         Dictionary<string, object> voteData = new Dictionary<string, object>
         {
-            {"title", title },
             {"options", new[] {opt1, opt2} },
-            {"category", category },
             {"CreatedAt", Timestamp.GetCurrentTimestamp() }
         };
 
