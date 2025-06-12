@@ -83,6 +83,43 @@ public class PollDataManager : MonoBehaviour
     }
 
     /// <summary>
+    /// 특정 사용자가 생성한 투표 목록을 최신순으로 가져옵니다.
+    /// </summary>
+    /// <param name="creatorUid">투표를 생성한 사용자의 UID</param>
+    /// <param name="limit">가져올 최대 개수</param>
+    /// <returns>해당 사용자가 만든 투표 데이터의 리스트</returns>
+    public async Task<List<PollData>> GetPollsByCreatorAsync(string creatorUid, int limit)
+    {
+        if (string.IsNullOrEmpty(creatorUid)) return new List<PollData>();
+
+        // 1. 쿼리 생성: 'polls' 컬렉션에서 'creatorUid' 필드가 일치하는 문서만 필터링합니다.
+        Query myPollsQuery = _db.Collection("polls")
+                                  .WhereEqualTo("creatorUid", creatorUid) // creatorUid가 일치하는 것만
+                                  .OrderByDescending("createdAt")      // 최신순으로 정렬
+                                  .Limit(limit);                       // 지정된 개수만큼만 가져오기
+
+        List<PollData> pollList = new List<PollData>();
+        try
+        {
+            QuerySnapshot snapshot = await myPollsQuery.GetSnapshotAsync();
+            foreach (var document in snapshot.Documents)
+            {
+                pollList.Add(ConvertDocumentToPollData(document));
+            }
+            Debug.Log($"'{creatorUid}' 사용자가 만든 투표 {pollList.Count}개를 찾았습니다.");
+        }
+        catch (Exception e)
+        {
+            Debug.LogError($"내가 올린 투표 조회 실패: {e.Message}");
+            // 이 쿼리는 Firestore '복합 색인(Composite Index)'이 필요하다는 오류를 발생시킬 수 있습니다.
+            // 오류 발생 시, 콘솔에 나타나는 URL을 클릭하여 색인을 생성해야 합니다.
+        }
+        return pollList;
+    }
+
+
+
+    /// <summary>
     /// Firestore의 DocumentSnapshot을 C#의 PollData 객체로 변환합니다.
     /// </summary>
     /// <param name="snapshot">변환할 Firestore 문서 스냅샷</param>

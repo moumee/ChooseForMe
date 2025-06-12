@@ -3184,7 +3184,7 @@ RectTransform:
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
   m_AnchoredPosition: {x: 52, y: -55}
-  m_SizeDelta: {x: 0, y: 0}
+  m_SizeDelta: {x: 468.02, y: 95.43}
   m_Pivot: {x: 0, y: 1}
 --- !u!114 &632460458
 MonoBehaviour:
@@ -5632,7 +5632,7 @@ RectTransform:
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
   m_AnchoredPosition: {x: 52, y: -55}
-  m_SizeDelta: {x: 468.02, y: 95.43}
+  m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0, y: 1}
 --- !u!114 &1276785330
 MonoBehaviour:
@@ -5764,7 +5764,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!114 &1299106709
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -8211,13 +8211,14 @@ GameObject:
   - component: {fileID: 1802413961}
   - component: {fileID: 1802413960}
   - component: {fileID: 1802413959}
+  - component: {fileID: 1802413962}
   m_Layer: 5
   m_Name: CreateVotePanel
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &1802413958
 RectTransform:
   m_ObjectHideFlags: 0
@@ -8306,6 +8307,21 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1802413957}
   m_CullTransparentMesh: 1
+--- !u!114 &1802413962
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1802413957}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ad95600541f51364a831d02158e84eaa, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _leaderboardManager: {fileID: 910011566}
+  _rankEntries:
+  - {fileID: 2118365747}
 --- !u!1 &1832544129
 GameObject:
   m_ObjectHideFlags: 0
@@ -10198,6 +10214,7 @@ GameObject:
   - component: {fileID: 2118365744}
   - component: {fileID: 2118365746}
   - component: {fileID: 2118365745}
+  - component: {fileID: 2118365747}
   m_Layer: 5
   m_Name: Line
   m_TagString: Untagged
@@ -10266,6 +10283,20 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2118365743}
   m_CullTransparentMesh: 1
+--- !u!114 &2118365747
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2118365743}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fb544f254a65729458df53f978d22bdf, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _nicknameText: {fileID: 1526155513}
+  _scoreText: {fileID: 1800509155}
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0
