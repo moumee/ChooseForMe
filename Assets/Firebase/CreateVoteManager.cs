@@ -29,6 +29,7 @@ public class CreateVoteManager : MonoBehaviour
     [SerializeField] private ProfileManager _profileManager;
 
     [Header("UI Elements")]
+    public TMP_InputField titleInput; // [추가] 제목 입력 필드
     public TMP_InputField option1Input;
     public TMP_InputField option2Input;
     public Button image1Button;
@@ -144,10 +145,11 @@ public class CreateVoteManager : MonoBehaviour
             Debug.LogError("�α��ε��� �ʾ� ��ǥ�� ������ �� �����ϴ�.");
             return;
         }
+        string title = titleInput.text;
         string opt1 = option1Input.text;
         string opt2 = option2Input.text;
 
-        if (string.IsNullOrEmpty(opt1) || string.IsNullOrEmpty(opt2))
+        if (string.IsNullOrEmpty(title) || string.IsNullOrEmpty(opt1) || string.IsNullOrEmpty(opt2))
         {
             Debug.LogWarning("��� �ؽ�Ʈ �ʵ带 ä���� �մϴ�.");
             return;
@@ -171,6 +173,7 @@ public class CreateVoteManager : MonoBehaviour
             // 2. ���� ������ ���� ����
             var pollData = new Dictionary<string, object>
             {
+                { "question", title }, // [추가]
                 { "options", new List<string> { opt1, opt2 } },
                 { "creatorUid", user.UserId },
                 { "creatorNickname", creatorNickname },
@@ -209,6 +212,7 @@ public class CreateVoteManager : MonoBehaviour
     /// </summary>
     private void ClearInputFields()
     {
+        titleInput.text = ""; // [추가]
         option1Input.text = "";
         option2Input.text = "";
         _image1Bytes = null;
