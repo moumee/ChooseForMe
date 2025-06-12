@@ -8,6 +8,7 @@ using System.IO;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using TMPro;
+
 using SFB; // Standalone File Browser 사용을 위해 추가
 
 public class CreateVoteManager : MonoBehaviour
@@ -35,14 +36,20 @@ public class CreateVoteManager : MonoBehaviour
     private FirebaseStorage _storage;
     private FirebaseAuth _auth;
 
+
+    public void Initialize(FirebaseFirestore db, FirebaseStorage storage, FirebaseAuth auth)
+    {
+        _db = db;
+        _storage = storage;
+        _auth = auth;
+    }
+
+
     void Start()
     {
-        _db = FirebaseFirestore.DefaultInstance;
-        _storage = FirebaseStorage.DefaultInstance;
-        _auth = FirebaseAuth.DefaultInstance;
 
         if (_profileManager == null) Debug.LogError("ProfileManager가 연결되지 않았습니다!");
-        
+
         image1Button.onClick.AddListener(() => PickImageForOption(1));
         image2Button.onClick.AddListener(() => PickImageForOption(2));
         uploadVoteButton.onClick.AddListener(HandleCreateVoteClicked);

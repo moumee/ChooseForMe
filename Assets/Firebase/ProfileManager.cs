@@ -45,9 +45,13 @@ public class ProfileManager : MonoBehaviour
 
     // --- Unity Lifecycle Methods ---
 
+    public void Initialize(FirebaseFirestore db)
+    {
+        _db = db;
+    }
+
     void Start()
     {
-        _db = FirebaseFirestore.DefaultInstance;
         if (nicknameSetupUI != null) nicknameSetupUI.SetActive(false);
     }
 

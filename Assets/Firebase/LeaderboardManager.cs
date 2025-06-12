@@ -8,28 +8,13 @@ public class LeaderboardManager : MonoBehaviour
 {
     private FirebaseFirestore _db;
 
-    async void Start()
+
+    public void Initialize(FirebaseFirestore db)
     {
-        _db = FirebaseFirestore.DefaultInstance;
-
-        // --- 테스트를 위한 호출 ---
-        Debug.Log("리더보드 데이터 조회를 시작합니다...");
-        List<RankerData> top5 = await GetTopRankersAsync(5);
-
-        if (top5.Count > 0)
-        {
-            Debug.Log("--- 상위 5위 랭킹 ---");
-            foreach (var ranker in top5)
-            {
-                Debug.Log($"{ranker.Rank}위: {ranker.Nickname} ({ranker.Score}점)");
-            }
-        }
-        else
-        {
-            Debug.Log("리더보드 데이터가 없거나 조회에 실패했습니다.");
-        }
+        _db = db;
     }
 
+    
     /// <summary>
     /// Firestore에서 상위 랭커 데이터를 가져옵니다.
     /// </summary>

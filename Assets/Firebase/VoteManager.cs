@@ -10,10 +10,11 @@ public class VoteManager : MonoBehaviour
     private FirebaseAuth _auth;
     private FirebaseFirestore _db;
 
-    void Start()
+    public void Initialize(FirebaseFirestore db, FirebaseAuth auth)
+
     {
-        _auth = FirebaseAuth.DefaultInstance;
-        _db = FirebaseFirestore.DefaultInstance;
+        _auth = auth;
+        _db = db;
     }
 
     /// <summary>

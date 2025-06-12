@@ -351,7 +351,7 @@ RectTransform:
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: -301, y: 684}
-  m_SizeDelta: {x: 0, y: 0}
+  m_SizeDelta: {x: 60.51, y: 41.76}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &41722150
 MonoBehaviour:
@@ -856,9 +856,9 @@ RectTransform:
   - {fileID: 2076200675}
   m_Father: {fileID: 2008071809}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 1}
-  m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 350, y: -50}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 550, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &251545317
@@ -1403,9 +1403,9 @@ RectTransform:
   - {fileID: 1990457905}
   m_Father: {fileID: 2008071809}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 1}
-  m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 350, y: -160}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 550, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &316364021
@@ -1632,7 +1632,7 @@ RectTransform:
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
   m_AnchoredPosition: {x: 50, y: -50}
-  m_SizeDelta: {x: 0, y: 0}
+  m_SizeDelta: {x: 365.28, y: 95.43}
   m_Pivot: {x: 0, y: 1}
 --- !u!114 &344469245
 MonoBehaviour:
@@ -3020,7 +3020,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &547172920
 RectTransform:
   m_ObjectHideFlags: 0
@@ -5400,9 +5400,9 @@ RectTransform:
   - {fileID: 1065187003}
   m_Father: {fileID: 2008071809}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 1}
-  m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 350, y: -490}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 550, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &833836048
@@ -6967,9 +6967,9 @@ RectTransform:
   - {fileID: 1195483774}
   m_Father: {fileID: 2008071809}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 1}
-  m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 350, y: -270}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 550, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1018946962
@@ -8231,7 +8231,7 @@ RectTransform:
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: -217, y: 0}
-  m_SizeDelta: {x: 46.81, y: 42.95}
+  m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1187704327
 MonoBehaviour:
@@ -8654,7 +8654,7 @@ RectTransform:
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: 0, y: -70}
-  m_SizeDelta: {x: 0, y: 100}
+  m_SizeDelta: {x: 228.3, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1218584447
 MonoBehaviour:
@@ -8860,7 +8860,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   myVoteButton: {fileID: 523489345}
-  createVoteButton: {fileID: 0}
+  createVoteButton: {fileID: 1412275382}
 --- !u!1 &1234309822
 GameObject:
   m_ObjectHideFlags: 0
@@ -9623,7 +9623,7 @@ RectTransform:
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: -217, y: 0}
-  m_SizeDelta: {x: 52.51, y: 42.95}
+  m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1321495669
 MonoBehaviour:
@@ -10668,7 +10668,7 @@ RectTransform:
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: 0, y: -70}
-  m_SizeDelta: {x: 0, y: 100}
+  m_SizeDelta: {x: 228.3, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1395880903
 MonoBehaviour:
@@ -10939,7 +10939,7 @@ RectTransform:
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
   m_AnchoredPosition: {x: 50, y: -50}
-  m_SizeDelta: {x: 226.98, y: 95.43}
+  m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0, y: 1}
 --- !u!114 &1439893056
 MonoBehaviour:
@@ -11618,9 +11618,9 @@ RectTransform:
   - {fileID: 1697590309}
   m_Father: {fileID: 2008071809}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 1}
-  m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 350, y: -380}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 550, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1536424745
@@ -13636,7 +13636,7 @@ MonoBehaviour:
   _pollDataManager: {fileID: 1831768831}
   _pollListContainer: {fileID: 998973844}
   _pollCardPrefab: {fileID: 841337817630050921, guid: db68c1d71c9feac4b9121c4a536b8fc1, type: 3}
-  createVoteButton: {fileID: 0}
+  createVoteButton: {fileID: 1367749791}
 --- !u!1 &1803511606
 GameObject:
   m_ObjectHideFlags: 0
@@ -14102,6 +14102,9 @@ MonoBehaviour:
   _firebaseInitializer: {fileID: 1831768829}
   _firebaseLogin: {fileID: 1831768828}
   _profileManager: {fileID: 1831768826}
+  _leaderboardManager: {fileID: 1831768825}
+  _pollDataManager: {fileID: 1831768831}
+  _createVoteManager: {fileID: 547172924}
   _loadingPanel: {fileID: 2099583424}
   _mainPanel: {fileID: 244298449}
 --- !u!114 &1831768828
@@ -15044,7 +15047,7 @@ RectTransform:
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: -217, y: 0}
-  m_SizeDelta: {x: 53.53, y: 42.95}
+  m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1890308634
 MonoBehaviour:
@@ -15195,7 +15198,7 @@ RectTransform:
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: -217, y: 0}
-  m_SizeDelta: {x: 52.08, y: 42.95}
+  m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1907337269
 MonoBehaviour:
@@ -15931,7 +15934,7 @@ RectTransform:
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: 0, y: -362}
-  m_SizeDelta: {x: 700, y: 540}
+  m_SizeDelta: {x: 700, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &2008071810
 MonoBehaviour:
@@ -16137,7 +16140,7 @@ RectTransform:
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: -217, y: 0}
-  m_SizeDelta: {x: 53.13, y: 42.95}
+  m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &2025153380
 MonoBehaviour:
@@ -16754,7 +16757,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &2086647807
 RectTransform:
   m_ObjectHideFlags: 0
@@ -16827,7 +16830,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2702374a179cf7f4b8a87ac753c4cb44, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  createVoteButton: {fileID: 0}
+  createVoteButton: {fileID: 1830798106}
 --- !u!114 &2086647811
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -16881,7 +16884,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &2099583425
 RectTransform:
   m_ObjectHideFlags: 0

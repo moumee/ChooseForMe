@@ -9,9 +9,9 @@ public class PollDataManager : MonoBehaviour
     private FirebaseFirestore _db;
     //private Dictionary<string, PollData> _pollCache = new Dictionary<string, PollData>();
 
-    void Start()
+    public void Initialize(FirebaseFirestore db)
     {
-        _db = FirebaseFirestore.DefaultInstance;
+        _db = db;
     }
 
     //public async Task<PollData> GetPollDataAsync(string pollId)
