@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
@@ -17,6 +18,10 @@ public class HomePanel : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDra
 
     [Header("Data Source")]
     public List<ContentData> contentDatas = new List<ContentData>();
+    [SerializeField] private PollDataManager pollDataManager;
+    
+    [Header("UI State")]
+    [SerializeField] private GameObject loadingIndicator;
 
     private int _itemCount;
     private int _currentDataIndex = 0;
@@ -25,13 +30,27 @@ public class HomePanel : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDra
     private Vector2 _beginDragPointerPos;
     private Vector2 _beginDragContentPos;
     private float _dragStartTime;
+    private bool _isInitialized = false;
     private bool _isDragging = false;
 
-    void Start()
+    async void Start()
     {
+        _isInitialized = false;
+        if (loadingIndicator != null) loadingIndicator.SetActive(true);
+
+        bool isLoaded = await LoadAndConvertPollsAsync();
+        
+        if (!isLoaded)
+        {
+            if (loadingIndicator != null) loadingIndicator.SetActive(false);
+            if(gameObject.activeInHierarchy) gameObject.SetActive(false);
+            return;
+        }
+        
         _itemCount = contentDatas.Count;
         if (_itemCount < 3)
         {
+            if (loadingIndicator != null) loadingIndicator.SetActive(false);
             if(gameObject.activeInHierarchy) gameObject.SetActive(false);
             return;
         }
@@ -45,8 +64,34 @@ public class HomePanel : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDra
         InitializeScreens();
         createVoteButton.onClick.AddListener(OnCreateVoteButtonClick);
         contentRect.anchoredPosition = Vector2.zero;
+
+        if (loadingIndicator != null) loadingIndicator.SetActive(false);
+        _isInitialized = true;
     }
 
+    private async Task<bool> LoadAndConvertPollsAsync()
+    {
+        if (pollDataManager == null) { return false; }
+        List<PollData> pollDataList = await pollDataManager.GetAllPollsAsync();
+        if (pollDataList == null || pollDataList.Count == 0) { return false; }
+
+        contentDatas.Clear();
+        foreach (var poll in pollDataList)
+        {
+            if (poll.Options == null || poll.Options.Count < 2) continue;
+            ContentData content = new ContentData {
+                pollId = poll.Id, voteTitle = poll.Question, itemAName = poll.Options[0], itemBName = poll.Options[1],
+                itemAImageUrl = (poll.OptionImages != null && poll.OptionImages.ContainsKey("0")) ? poll.OptionImages["0"] : "",
+                itemBImageUrl = (poll.OptionImages != null && poll.OptionImages.ContainsKey("1")) ? poll.OptionImages["1"] : "",
+                itemAResultPercent = (poll.TotalVoteCount > 0) ? (float)poll.Option1Votes / poll.TotalVoteCount : 0f,
+                itemBResultPercent = (poll.TotalVoteCount > 0) ? (float)poll.Option2Votes / poll.TotalVoteCount : 0f,
+                comments = new List<string>() 
+            };
+            contentDatas.Add(content);
+        }
+        return true;
+    }
+    
     private void InitializeScreens()
     {
         screenObjects[0].anchoredPosition = new Vector2(0, 0);
@@ -60,6 +105,7 @@ public class HomePanel : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDra
 
     public void OnBeginDrag(PointerEventData eventData)
     {
+        if (!_isInitialized) return;
         _isDragging = true;
         if (_snapCoroutine != null) StopCoroutine(_snapCoroutine);
         _beginDragPointerPos = eventData.position;
@@ -69,23 +115,25 @@ public class HomePanel : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDra
 
     public void OnDrag(PointerEventData eventData)
     {
+        if (!_isInitialized) return;
         Vector2 dragDelta = eventData.position - _beginDragPointerPos;
         contentRect.anchoredPosition = _beginDragContentPos + new Vector2(0, dragDelta.y);
     }
 
     public void OnEndDrag(PointerEventData eventData)
     {
+        if (!_isInitialized) return;
         _isDragging = false;
         
         float dragDuration = Time.time - _dragStartTime;
         if (dragDuration < 0.01f) dragDuration = 0.01f;
         float velocityY = (eventData.position.y - _beginDragPointerPos.y) / dragDuration;
-
         float currentY = contentRect.anchoredPosition.y;
         
-        int direction = 0; // 1: 위로 이동 (다음), -1: 아래로 이동 (이전)
+        // [방향 로직 최종 수정]
+        // 1: 위로 스와이프 (다음 아이템), -1: 아래로 스와이프 (이전 아이템)
+        int direction = 0; 
         
-        // 방향 판단 로직
         if (velocityY > minSwipeVelocity) direction = 1;
         else if (velocityY < -minSwipeVelocity) direction = -1;
         else
@@ -97,53 +145,51 @@ public class HomePanel : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDra
         _snapCoroutine = StartCoroutine(SnapAndReset(direction));
     }
     
-    // ==========================================================
-    // 업데이트 속도 문제를 해결한 최종 코루틴
-    // ==========================================================
     private IEnumerator SnapAndReset(int direction)
     {
-        // 1. 스와이프가 일어났다면, '즉시' 데이터와 화면을 다음/이전 상태로 업데이트
-        if (direction != 0)
-        {
-            // 사용자가 드래그로 밀어놓은 현재 content 위치를 저장
-            float currentY = contentRect.anchoredPosition.y;
-
-            // 데이터 인덱스를 먼저 변경
-            if (direction == 1) // Content가 위로 이동 (다음 아이템을 볼 것)
-                _currentDataIndex = GetNextDataIndex(_currentDataIndex);
-            else // Content가 아래로 이동 (이전 아이템을 볼 것)
-                _currentDataIndex = GetPreviousDataIndex(_currentDataIndex);
-            
-            // 변경된 데이터 인덱스를 기준으로 화면 전체를 즉시 리셋
-            InitializeScreens();
-
-            // 중요: 화면을 리셋한 뒤, Content의 위치를 사용자가 드래그를 멈춘 위치에서 '이어지는 것처럼' 보이도록 설정
-            // 이렇게 하면 화면이 깜빡이거나 점프하는 느낌이 사라집니다.
-            contentRect.anchoredPosition = new Vector2(0, currentY - (direction * _itemHeight));
-        }
-
-        // 2. 이제 화면을 제자리(y=0)로 부드럽게 정렬하는 애니메이션만 보여줌
-        while (Mathf.Abs(contentRect.anchoredPosition.y) > 1f)
+        // 목표 위치 계산: 위로 스와이프(direction=1)하면 Content는 위로(+H) 이동
+        float targetY = direction * _itemHeight;
+        
+        // 목표 위치까지 부드럽게 스냅 애니메이션
+        while (Mathf.Abs(contentRect.anchoredPosition.y - targetY) > 1f)
         {
             if (_isDragging) yield break;
-            contentRect.anchoredPosition = Vector2.Lerp(contentRect.anchoredPosition, Vector2.zero, Time.deltaTime * snapSpeed);
+            contentRect.anchoredPosition = Vector2.Lerp(contentRect.anchoredPosition, new Vector2(0, targetY), Time.deltaTime * snapSpeed);
             yield return null;
         }
+        
+        // 애니메이션이 끝나면 정확한 위치로 고정
+        contentRect.anchoredPosition = new Vector2(0, targetY);
 
-        // 3. 애니메이션 종료 후 정확한 위치로 고정
+        // 스와이프가 일어난 경우에만 데이터 및 화면 리셋
+        if (direction != 0)
+        {
+            // 방향에 맞게 데이터 인덱스 업데이트
+            if (direction == 1) // 다음 아이템으로
+                _currentDataIndex = GetNextDataIndex(_currentDataIndex);
+            else // 이전 아이템으로
+                _currentDataIndex = GetPreviousDataIndex(_currentDataIndex);
+            
+            // 화면 전체를 새로운 데이터 인덱스 기준으로 리셋
+            InitializeScreens();
+        }
+        
+        // 마지막으로 Content 위치를 (0,0)으로 완벽하게 리셋하여 다음 스와이프 준비
         contentRect.anchoredPosition = Vector2.zero;
         _snapCoroutine = null;
     }
     
-    // --- 나머지 헬퍼 메서드 (이전과 동일) ---
     private void UpdateScreenContent(RectTransform screen, int dataIndex)
     {
+        if (_itemCount == 0) return;
         ContentData data = contentDatas[dataIndex];
         ScreenContentUI ui = screen.GetComponent<ScreenContentUI>();
         if (ui != null) ui.SetContent(data);
     }
-    private int GetNextDataIndex(int index) => (index + 1) % _itemCount;
-    private int GetPreviousDataIndex(int index) => (index - 1 + _itemCount) % _itemCount;
+
+    private int GetNextDataIndex(int index) => (_itemCount == 0) ? 0 : (index + 1) % _itemCount;
+    private int GetPreviousDataIndex(int index) => (_itemCount == 0) ? 0 : (index - 1 + _itemCount) % _itemCount;
+    
     private void OnCreateVoteButtonClick()
     {
         Debug.Log("투표 생성 버튼 클릭");

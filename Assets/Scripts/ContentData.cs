@@ -1,35 +1,33 @@
 using UnityEngine;
-using System.Collections.Generic; // List 사용
+using System.Collections.Generic;
 
-// 각 콘텐츠의 현재 상태를 나타내는 열거형(enum) 정의
 public enum VoteState
 {
-    InitialVote, // 1. 본 투표
-    Prediction, // 2. 예측 투표
-    Result // 3. 결과 확인
+    InitialVote,
+    Prediction,
+    Result
 }
 
 [System.Serializable]
 public class ContentData
 {
-    public string voteTitle;
+    // --- 공통 정보 ---
+    public string pollId; // Firestore 문서 ID를 저장하기 위한 필드
+    public string voteTitle; // 예: "오늘 뭐 먹을까?"
 
-    // --- 상태 1, 2 공통 정보 ---
+    // --- 선택지 정보 ---
     public string itemAName;
-    public Sprite itemAImage;
+    public string itemAImageUrl; // Sprite -> string 으로 변경
     public string itemBName;
-    public Sprite itemBImage;
+    public string itemBImageUrl; // Sprite -> string 으로 변경
 
-    // --- 상태 3 정보 ---
-    public float itemAResultPercent; // A 항목 최종 득표율 (0.0 ~ 1.0)
-    public float itemBResultPercent; // B 항목 최종 득표율
-    public List<string> comments; // 댓글 리스트
+    // --- 결과 정보 ---
+    public float itemAResultPercent;
+    public float itemBResultPercent;
+    public List<string> comments;
 
-    // --- 상태 추적 및 사용자 데이터 ---
-    [Tooltip("현재 이 콘텐츠의 상태")] public VoteState currentState = VoteState.InitialVote;
-
-    [HideInInspector] // 사용자의 선택은 Inspector에 보일 필요 없음
-    public int userVoteChoice = -1; // -1: 미선택, 0: A선택, 1: B선택
-
+    // --- 상태 정보 ---
+    public VoteState currentState = VoteState.InitialVote;
+    [HideInInspector] public int userVoteChoice = -1;
     [HideInInspector] public int userPredictionChoice = -1;
 }
