@@ -1,15 +1,14 @@
 using System;
 using TMPro;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class MyPagePanel : MonoBehaviour
 {
-    [SerializeField] private TMP_Text username;
-    [SerializeField] private TMP_Text level;
-    [SerializeField] private TMP_Text score;
+    [SerializeField] private Button createVoteButton;
 
-    private void OnEnable()
+    private void Awake()
     {
-        
+        createVoteButton.onClick.AddListener((() => {PanelManager.Instance.EnablePanel(PanelType.CreateVote);}));
     }
 }

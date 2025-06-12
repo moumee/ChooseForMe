@@ -192,6 +192,6 @@ public class HomePanel : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDra
     
     private void OnCreateVoteButtonClick()
     {
-        Debug.Log("투표 생성 버튼 클릭");
+        PanelManager.Instance.EnablePanel(PanelType.CreateVote);
     }
 }

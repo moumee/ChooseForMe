@@ -1,8 +1,11 @@
 // MyPollsUI.cs
+
+using System;
 using UnityEngine;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Firebase.Auth;
+using UnityEngine.UI;
 
 public class MyPollsUI : MonoBehaviour
 {
@@ -10,50 +13,57 @@ public class MyPollsUI : MonoBehaviour
     [SerializeField] private PollDataManager _pollDataManager;
 
     [Header("UI & Prefab")]
-    [SerializeField] private Transform _pollListContainer;   // ÅõÇ¥ Ä«µåµéÀÌ »ý¼ºµÉ ºÎ¸ð ÄÁÅ×ÀÌ³Ê
-    [SerializeField] private PollDisplay _pollCardPrefab;    // ÅõÇ¥ Ä«µå UI ÇÁ¸®ÆÕ
+    [SerializeField] private Transform _pollListContainer;   // ï¿½ï¿½Ç¥ Ä«ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Î¸ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Ì³ï¿½
+    [SerializeField] private PollDisplay _pollCardPrefab;    // ï¿½ï¿½Ç¥ Ä«ï¿½ï¿½ UI ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 
-    // '³»°¡ ¿Ã¸° ÅõÇ¥' UI°¡ È°¼ºÈ­µÉ ¶§¸¶´Ù ¸ñ·ÏÀ» »õ·Î°íÄ§ÇÕ´Ï´Ù.
+    [SerializeField] private Button createVoteButton;
+
+    private void Awake()
+    {
+        createVoteButton.onClick.AddListener(()=>{PanelManager.Instance.EnablePanel(PanelType.CreateVote);});
+    }
+
+    // 'ï¿½ï¿½ï¿½ï¿½ ï¿½Ã¸ï¿½ ï¿½ï¿½Ç¥' UIï¿½ï¿½ È°ï¿½ï¿½È­ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½Î°ï¿½Ä§ï¿½Õ´Ï´ï¿½.
     private async void OnEnable()
     {
         await RefreshMyPolls();
     }
 
     /// <summary>
-    /// ³»°¡ ¿Ã¸° ÅõÇ¥ µ¥ÀÌÅÍ¸¦ ºÒ·¯¿Í È­¸é¿¡ UI·Î »ý¼ºÇÕ´Ï´Ù.
+    /// ï¿½ï¿½ï¿½ï¿½ ï¿½Ã¸ï¿½ ï¿½ï¿½Ç¥ ï¿½ï¿½ï¿½ï¿½ï¿½Í¸ï¿½ ï¿½Ò·ï¿½ï¿½ï¿½ È­ï¿½é¿¡ UIï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Õ´Ï´ï¿½.
     /// </summary>
     public async Task RefreshMyPolls()
     {
         if (_pollDataManager == null || _pollCardPrefab == null || _pollListContainer == null)
         {
-            Debug.LogError("ÇÊ¼ö ÄÄÆ÷³ÍÆ®°¡ Inspector¿¡ ¿¬°áµÇÁö ¾Ê¾Ò½À´Ï´Ù.");
+            Debug.LogError("ï¿½Ê¼ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Æ®ï¿½ï¿½ Inspectorï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ê¾Ò½ï¿½ï¿½Ï´ï¿½.");
             return;
         }
 
         FirebaseUser user = FirebaseAuth.DefaultInstance.CurrentUser;
         if (user == null)
         {
-            Debug.LogWarning("·Î±×ÀÎµÇ¾î ÀÖÁö ¾Ê¾Æ ³»°¡ ¿Ã¸° ÅõÇ¥¸¦ º¼ ¼ö ¾ø½À´Ï´Ù.");
+            Debug.LogWarning("ï¿½Î±ï¿½ï¿½ÎµÇ¾ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½Ê¾ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½Ã¸ï¿½ ï¿½ï¿½Ç¥ï¿½ï¿½ ï¿½ï¿½ ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Ï´ï¿½.");
             return;
         }
 
-        // 1. ±âÁ¸ ¸ñ·Ï »èÁ¦
+        // 1. ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
         foreach (Transform child in _pollListContainer)
         {
             Destroy(child.gameObject);
         }
 
-        // 2. PollDataManager¿¡°Ô "³»°¡ ¸¸µç" ÅõÇ¥ ¸ñ·Ï µ¥ÀÌÅÍ ¿äÃ»
-        List<PollData> myPolls = await _pollDataManager.GetPollsByCreatorAsync(user.UserId, 30); // ÃÖ´ë 30°³
+        // 2. PollDataManagerï¿½ï¿½ï¿½ï¿½ "ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½" ï¿½ï¿½Ç¥ ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½Ã»
+        List<PollData> myPolls = await _pollDataManager.GetPollsByCreatorAsync(user.UserId, 30); // ï¿½Ö´ï¿½ 30ï¿½ï¿½
 
         if (myPolls == null || myPolls.Count == 0)
         {
-            Debug.Log("³»°¡ ¿Ã¸° ÅõÇ¥°¡ ¾ø½À´Ï´Ù.");
-            // TODO: "ÀÛ¼ºÇÑ ÅõÇ¥°¡ ¾ø½À´Ï´Ù" ÅØ½ºÆ® UI Ç¥½Ã
+            Debug.Log("ï¿½ï¿½ï¿½ï¿½ ï¿½Ã¸ï¿½ ï¿½ï¿½Ç¥ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Ï´ï¿½.");
+            // TODO: "ï¿½Û¼ï¿½ï¿½ï¿½ ï¿½ï¿½Ç¥ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Ï´ï¿½" ï¿½Ø½ï¿½Æ® UI Ç¥ï¿½ï¿½
             return;
         }
 
-        // 3. ¹Þ¾Æ¿Â ¸ñ·ÏÀ¸·Î UI Ä«µå »ý¼º
+        // 3. ï¿½Þ¾Æ¿ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ UI Ä«ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
         foreach (PollData pollData in myPolls)
         {
             PollDisplay newCard = Instantiate(_pollCardPrefab, _pollListContainer);

@@ -5,10 +5,12 @@ using UnityEngine.UI;
 public class CreateVotePanel : MonoBehaviour
 {
     [SerializeField] private Button submitButton;
+    [SerializeField] private Button exitButton;
 
     private void Awake()
     {
         submitButton.onClick.AddListener(OnSubmitButtonClick);
+        exitButton.onClick.AddListener((() => {PanelManager.Instance.EnablePanel(PanelType.Home);}));
     }
 
     private void OnSubmitButtonClick()

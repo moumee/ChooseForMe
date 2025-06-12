@@ -8,33 +8,22 @@ using System.IO;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using TMPro;
+using SFB; // Standalone File Browser 사용을 위해 추가
 
 public class CreateVoteManager : MonoBehaviour
 {
-    // --- JavaScript �÷����� �Լ� ���� ---
-#if UNITY_WEBGL && !UNITY_EDITOR
-            [DllImport("__Internal")]
-            private static extern void UploadFile(string gameObjectName, string callbackMethodName, string fileType);
-#endif
-
-    // --- ������ �׽�Ʈ�� �ʵ� ---
-#if UNITY_EDITOR
-    [Header("������ �׽�Ʈ�� �̹���")]
-    public Texture2D testImage1; // Inspector â���� �׽�Ʈ�� �̹��� ������ ���⿡ ����
-    public Texture2D testImage2;
-#endif
-
-    [Header("FirebaseManager Connection")]
-    [Tooltip("FirebaseManager ������Ʈ�� �����ؾ� �մϴ�.")]
+    [Header("Manager Connection")]
+    [Tooltip("@Managers 오브젝트에 연결해야 합니다.")]
     [SerializeField] private ProfileManager _profileManager;
 
     [Header("UI Elements")]
-    public TMP_InputField titleInput; // [추가] 제목 입력 필드
+    public TMP_InputField titleInput;
     public TMP_InputField option1Input;
     public TMP_InputField option2Input;
     public Button image1Button;
     public Button image2Button;
     public Button uploadVoteButton;
+    // TODO: 투표 유형(PredictionPoll, UserSelectionPoll)을 선택할 UI 추가 필요
 
     // --- Private Fields ---
     private byte[] _image1Bytes;
@@ -52,58 +41,40 @@ public class CreateVoteManager : MonoBehaviour
         _storage = FirebaseStorage.DefaultInstance;
         _auth = FirebaseAuth.DefaultInstance;
 
-        if (_profileManager == null) Debug.LogError("ProfileManager�� ������� �ʾҽ��ϴ�!");
-        // ��ư ������ �Ҵ�
+        if (_profileManager == null) Debug.LogError("ProfileManager가 연결되지 않았습니다!");
+        
         image1Button.onClick.AddListener(() => PickImageForOption(1));
         image2Button.onClick.AddListener(() => PickImageForOption(2));
         uploadVoteButton.onClick.AddListener(HandleCreateVoteClicked);
     }
 
     /// <summary>
-    /// �̹��� ���� ��ư Ŭ�� �� �÷����� �´� ���� ��Ŀ�� ȣ���մϴ�.
+    /// 이미지 선택 버튼 클릭 시 Windows 파일 탐색기를 엽니다.
     /// </summary>
     void PickImageForOption(int optionNumber)
     {
         _currentPickingOption = optionNumber;
 
-#if UNITY_WEBGL && !UNITY_EDITOR
-        // WebGL ���� ȯ�濡���� JavaScript �÷����� �Լ��� ȣ���մϴ�.
-        UploadFile(gameObject.name, "OnImageSelectedFromWebGL", "image/*");
-#elif UNITY_EDITOR
-        // ������ ȯ�濡���� �׽�Ʈ�� �̹����� �ٷ� byte �迭�� ��ȯ�մϴ�.
-        Debug.Log("������ ���: �׽�Ʈ �̹����� ����մϴ�.");
-        Texture2D selectedTestImage = (optionNumber == 1) ? testImage1 : testImage2;
-        if (selectedTestImage != null)
+        // 파일 탐색기에 표시할 확장자 필터 설정
+        var extensions = new[] {
+            new ExtensionFilter("Image Files", "png", "jpg", "jpeg")
+        };
+
+        // 파일 탐색기 열기 (단일 파일 선택 모드)
+        string[] paths = StandaloneFileBrowser.OpenFilePanel("이미지 선택", "", extensions, false);
+
+        // 사용자가 파일을 선택했다면 (경로가 1개 이상 반환되면)
+        if (paths.Length > 0 && !string.IsNullOrEmpty(paths[0]))
         {
-            byte[] bytes = GetReadableTextureBytes(selectedTestImage);
+            Debug.Log($"선택된 파일 경로: {paths[0]}");
+            // 해당 경로의 파일을 byte 배열로 읽어와서 처리
+            byte[] bytes = File.ReadAllBytes(paths[0]);
             ProcessSelectedImageBytes(bytes);
         }
-        else
-        {
-            Debug.LogWarning($"�׽�Ʈ �̹��� {optionNumber}�� �������� �ʾҽ��ϴ�.");
-        }
-#else
-        // ����� �� �ٸ� ȯ�濡���� NativeGallery�� ���� ������ �ʿ��մϴ�.
-        Debug.LogWarning("�� �÷��������� �̹��� ��Ŀ ����� �������� �ʽ��ϴ�.");
-#endif
     }
 
     /// <summary>
-    /// JavaScript���� ���� ������ �Ϸ�Ǹ� ȣ��� �ݹ� �޼ҵ� (WebGL ����)
-    /// </summary>
-    public void OnImageSelectedFromWebGL(string base64Data)
-    {
-        if (string.IsNullOrEmpty(base64Data)) return;
-
-        var parts = base64Data.Split(',');
-        if (parts.Length < 2) return;
-
-        byte[] bytes = Convert.FromBase64String(parts[1]);
-        ProcessSelectedImageBytes(bytes);
-    }
-
-    /// <summary>
-    /// ���õ� �̹����� byte �����͸� �������� ó���ϴ� �޼ҵ�
+    /// 선택된 이미지의 byte 데이터를 내부 변수에 저장하고 로그를 출력합니다.
     /// </summary>
     private void ProcessSelectedImageBytes(byte[] bytes)
     {
@@ -112,54 +83,44 @@ public class CreateVoteManager : MonoBehaviour
         if (_currentPickingOption == 1)
         {
             _image1Bytes = bytes;
-            Debug.Log("Option 1 �̹����� �����ͷ� ����Ǿ����ϴ�.");
+            Debug.Log("Option 1 이미지가 데이터로 저장되었습니다.");
         }
         else
         {
             _image2Bytes = bytes;
-            Debug.Log("Option 2 �̹����� �����ͷ� ����Ǿ����ϴ�.");
+            Debug.Log("Option 2 이미지가 데이터로 저장되었습니다.");
         }
-        // TODO: ���õ� �̹����� UI�� �̸������ �����ִ� ���� �߰�
+        // TODO: 선택된 이미지를 UI에 미리보기로 보여주는 로직 추가
     }
-
-
-
-    /// <summary>
-    /// UI�� ��ǥ ���� ��ư Ŭ�� �� �����ϰ� �񵿱� �޼ҵ带 ȣ���ϴ� �ڵ鷯
-    /// </summary>
+    
     private void HandleCreateVoteClicked()
     {
-        // _= �� "�� �񵿱� �۾��� ���� ������ ��ٸ� �ʿ�� ����"�� �ǹ��� �ֽ� C# �����Դϴ�.
-        // CreateVoteAsync ���ο��� ��� ���� ó���� ����մϴ�.
         _ = CreateVoteAsync();
     }
 
     /// <summary>
-    /// �ؽ�Ʈ ����� ��ǥ ������ Firestore�� �����ϴ� �ٽ� �޼ҵ�
+    /// 입력된 정보와 이미지를 사용하여 투표 문서를 Firestore에 생성합니다.
     /// </summary>
     private async Task CreateVoteAsync()
     {
         FirebaseUser user = _auth.CurrentUser;
-        if (user == null)
-        {
-            Debug.LogError("�α��ε��� �ʾ� ��ǥ�� ������ �� �����ϴ�.");
-            return;
-        }
+        if (user == null) { /* ... 로그인 확인 ... */ return; }
+
         string title = titleInput.text;
         string opt1 = option1Input.text;
         string opt2 = option2Input.text;
+        string pollTypeString = "PredictionPoll"; // TODO: UI에서 실제 값 가져오기
 
         if (string.IsNullOrEmpty(title) || string.IsNullOrEmpty(opt1) || string.IsNullOrEmpty(opt2))
         {
-            Debug.LogWarning("��� �ؽ�Ʈ �ʵ带 ä���� �մϴ�.");
+            Debug.LogWarning("제목을 포함한 모든 텍스트 필드를 채워야 합니다.");
             return;
         }
 
-        uploadVoteButton.interactable = false; // �ߺ� Ŭ�� ����
+        uploadVoteButton.interactable = false;
 
         try
         {
-            // 1. �̹��� ���� ���ε� �� �ۼ��� �г��� ���� ��ȸ
             Task<string> uploadTask1 = (_image1Bytes != null) ? UploadImageAsync(_image1Bytes, "option1") : Task.FromResult<string>(null);
             Task<string> uploadTask2 = (_image2Bytes != null) ? UploadImageAsync(_image2Bytes, "option2") : Task.FromResult<string>(null);
             Task<string> nicknameTask = _profileManager.GetUserNicknameAsync(user.UserId);
@@ -168,51 +129,41 @@ public class CreateVoteManager : MonoBehaviour
 
             string imageUrl1 = await uploadTask1;
             string imageUrl2 = await uploadTask2;
-            string creatorNickname = await nicknameTask ?? "�͸�";
+            string creatorNickname = await nicknameTask ?? "익명";
 
-            // 2. ���� ������ ���� ����
             var pollData = new Dictionary<string, object>
             {
-                { "question", title }, // [추가]
+                { "question", title },
                 { "options", new List<string> { opt1, opt2 } },
                 { "creatorUid", user.UserId },
                 { "creatorNickname", creatorNickname },
                 { "createdAt", FieldValue.ServerTimestamp },
-                { "pollType", "ChoicePoll" },
-                { "optionImages", new Dictionary<string, string>
-                    {
-                        { "0", imageUrl1 ?? "" },
-                        { "1", imageUrl2 ?? "" }
-                    }
-                },
+                { "pollType", pollTypeString }, 
+                { "optionImages", new Dictionary<string, string> { {"0", imageUrl1 ?? ""}, {"1", imageUrl2 ?? ""} } },
                 { "totalVoteCount", 0 },
                 { "option1Votes", 0 },
                 { "option2Votes", 0 },
                 { "isClosed", false }
             };
-
-            // 3. 'polls' �÷��ǿ� ���� �߰�
+            
             DocumentReference addedDocRef = await _db.Collection("polls").AddAsync(pollData);
-            Debug.Log($"��ǥ�� ���������� �����Ǿ����ϴ�! Poll ID: {addedDocRef.Id}");
-
+            Debug.Log($"투표가 성공적으로 생성되었습니다! Poll ID: {addedDocRef.Id}");
+            
             ClearInputFields();
         }
         catch (Exception e)
         {
-            Debug.LogError($"��ǥ ���� ����: {e.Message}");
+            Debug.LogError($"투표 생성 실패: {e.Message}");
         }
         finally
         {
             uploadVoteButton.interactable = true;
         }
     }
-
-    /// <summary>
-    /// �۾� �Ϸ� �� �Է� �ʵ带 �ʱ�ȭ�ϴ� �޼ҵ�
-    /// </summary>
+    
     private void ClearInputFields()
     {
-        titleInput.text = ""; // [추가]
+        titleInput.text = "";
         option1Input.text = "";
         option2Input.text = "";
         _image1Bytes = null;
@@ -220,56 +171,25 @@ public class CreateVoteManager : MonoBehaviour
     }
 
     /// <summary>
-    /// �̹��� byte �迭�� Firebase Storage�� ���ε��ϰ� �ٿ�ε� URL�� ��ȯ�մϴ�.
+    /// 이미지 byte 배열을 Firebase Storage에 업로드하고 다운로드 URL을 반환합니다.
     /// </summary>
     private async Task<string> UploadImageAsync(byte[] bytes, string fileNamePart)
     {
         try
         {
-            string fileName = $"{fileNamePart}_{Guid.NewGuid()}.png"; // Ȯ���ڴ� PNG�� ���� (Ȥ�� MimeType�� ����)
+            // 파일 확장자를 알 수 없으므로 png로 통일하거나, 파일 시그니처를 분석해야 함. png가 무난.
+            string fileName = $"{fileNamePart}_{Guid.NewGuid()}.png";
             StorageReference imageRef = _storage.GetReference($"pollImages/{_auth.CurrentUser.UserId}/{fileName}");
             var metadata = new MetadataChange { ContentType = "image/png" };
-
+            
             await imageRef.PutBytesAsync(bytes, metadata);
             Uri downloadUri = await imageRef.GetDownloadUrlAsync();
             return downloadUri.ToString();
         }
         catch (Exception e)
         {
-            Debug.LogError($"�̹��� ���ε� ���� ({fileNamePart}): {e.Message}");
+            Debug.LogError($"이미지 업로드 실패 ({fileNamePart}): {e.Message}");
             return null;
         }
-    }
-
-    private byte[] GetReadableTextureBytes(Texture2D sourceTexture)
-    {
-        // 1. ���� �ؽ�ó�� �����Ͽ� ���� �ؽ�ó�� ���� ũ��� ����ϴ�.
-        RenderTexture rt = RenderTexture.GetTemporary(
-            sourceTexture.width,
-            sourceTexture.height,
-            0,
-            RenderTextureFormat.Default,
-            RenderTextureReadWrite.Linear
-        );
-
-        // 2. ���� �ؽ�ó(sourceTexture)�� ������ ���� �ؽ�ó(rt)�� ����(Blit)�մϴ�.
-        Graphics.Blit(sourceTexture, rt);
-
-        // 3. ���� Ȱ��ȭ�� ���� �ؽ�ó�� ����ϰ�, �츮�� ���� �ؽ�ó�� Ȱ��ȭ�մϴ�.
-        RenderTexture previous = RenderTexture.active;
-        RenderTexture.active = rt;
-
-        // 4. Ȱ��ȭ�� ���� �ؽ�ó���� �ȼ��� �о�� ���ο� Texture2D�� �����մϴ�.
-        // �� �ؽ�ó�� �б� ������ ARGB32 �����Դϴ�.
-        Texture2D readableTexture = new Texture2D(sourceTexture.width, sourceTexture.height);
-        readableTexture.ReadPixels(new Rect(0, 0, rt.width, rt.height), 0, 0);
-        readableTexture.Apply();
-
-        // 5. Ȱ�� ���� �ؽ�ó�� ������� �����ϰ�, �ӽ� ���� �ؽ�ó�� �����մϴ�.
-        RenderTexture.active = previous;
-        RenderTexture.ReleaseTemporary(rt);
-
-        // 6. ���� �б� ������ ���纻(readableTexture)�� PNG�� ���ڵ��մϴ�.
-        return readableTexture.EncodeToPNG();
     }
 }
