@@ -25,6 +25,10 @@ public class CreateVoteManager : MonoBehaviour
     public Button image2Button;
     public Button uploadVoteButton;
     // TODO: 투표 유형(PredictionPoll, UserSelectionPoll)을 선택할 UI 추가 필요
+    [Header("Image Previews")]
+    public Image option1ImagePreview;
+    public Image option2ImagePreview;
+
 
     // --- Private Fields ---
     private byte[] _image1Bytes;
@@ -83,23 +87,56 @@ public class CreateVoteManager : MonoBehaviour
     /// <summary>
     /// 선택된 이미지의 byte 데이터를 내부 변수에 저장하고 로그를 출력합니다.
     /// </summary>
+    /// <summary>
+    /// 선택된 이미지의 byte 데이터를 내부 변수에 저장하고 UI에 미리보기를 표시합니다.
+    /// </summary>
     private void ProcessSelectedImageBytes(byte[] bytes)
     {
         if (bytes == null || bytes.Length == 0) return;
 
+        // 1. byte 배열을 Texture2D로 변환합니다.
+        //    - 새로운 Texture2D를 생성합니다. (크기는 중요하지 않음, LoadImage가 알아서 조절)
+        //    - ImageConversion.LoadImage 함수는 byte 데이터를 읽어 텍스처를 구성합니다.
+        Texture2D texture = new Texture2D(2, 2);
+        if (!ImageConversion.LoadImage(texture, bytes))
+        {
+            Debug.LogError("이미지 데이터를 Texture2D로 변환하는 데 실패했습니다.");
+            return;
+        }
+
+        // 2. Texture2D를 UI에 표시할 수 있는 Sprite로 변환합니다.
+        Sprite newSprite = Sprite.Create(
+            texture,
+            new Rect(0.0f, 0.0f, texture.width, texture.height),
+            new Vector2(0.5f, 0.5f) // 이미지의 정중앙을 중심축(pivot)으로 설정
+        );
+
+        // 3. 현재 선택 중인 옵션에 맞는 Image 컴포넌트와 byte 변수를 찾아 처리합니다.
         if (_currentPickingOption == 1)
         {
-            _image1Bytes = bytes;
-            Debug.Log("Option 1 이미지가 데이터로 저장되었습니다.");
+            _image1Bytes = bytes; // 나중에 업로드할 수 있도록 byte 데이터 저장
+            if (option1ImagePreview != null)
+            {
+                option1ImagePreview.sprite = newSprite; // UI Image의 이미지를 교체
+                option1ImagePreview.gameObject.SetActive(true); // 이미지가 없어서 꺼져있었다면 다시 켭니다.
+            }
+            Debug.Log("Option 1 이미지 미리보기를 업데이트했습니다.");
         }
         else
         {
             _image2Bytes = bytes;
-            Debug.Log("Option 2 이미지가 데이터로 저장되었습니다.");
+            if (option2ImagePreview != null)
+            {
+                option2ImagePreview.sprite = newSprite;
+                option2ImagePreview.gameObject.SetActive(true);
+            }
+            Debug.Log("Option 2 이미지 미리보기를 업데이트했습니다.");
         }
-        // TODO: 선택된 이미지를 UI에 미리보기로 보여주는 로직 추가
     }
-    
+
+
+
+
     private void HandleCreateVoteClicked()
     {
         _ = CreateVoteAsync();
