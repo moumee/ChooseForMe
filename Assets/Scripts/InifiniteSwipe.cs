@@ -3,11 +3,7 @@ using UnityEngine.EventSystems;
 using System.Collections;
 using System.Collections.Generic;
 
-/// <summary>
-/// [독립 실행 버전]
-/// 다른 스크립트 없이, 이 컴포넌트를 추가하는 것만으로 3개의 UI 아이템을 재배치하며
-/// 무한 스와이프 기능을 구현합니다.
-/// </summary>
+
 public class InfiniteSwipe : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragHandler
 {
     [Header("필수 연결 항목")]
@@ -28,7 +24,7 @@ public class InfiniteSwipe : MonoBehaviour, IBeginDragHandler, IDragHandler, IEn
     [SerializeField] private float minSwipeDistance = 100f;
 
     // --- 내부 변수 (수정 필요 없음) ---
-    private const int POOL_SIZE = 3;
+    private const int PoolSize = 3;
     private List<RectTransform> _itemPool = new List<RectTransform>();
     private int _currentIndex = 0;
     private float _itemHeight;
@@ -72,7 +68,7 @@ public class InfiniteSwipe : MonoBehaviour, IBeginDragHandler, IDragHandler, IEn
         }
 
         // 3개의 아이템 풀 생성
-        for (int i = 0; i < POOL_SIZE; i++)
+        for (int i = 0; i < PoolSize; i++)
         {
             GameObject itemGO = Instantiate(itemPrefab, contentPanel);
             _itemPool.Add(itemGO.GetComponent<RectTransform>());
