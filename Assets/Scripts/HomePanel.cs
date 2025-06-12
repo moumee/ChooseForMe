@@ -12,7 +12,7 @@ public class HomePanel : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDra
     [SerializeField] private RectTransform[] screenObjects;
 
     [Header("Scroll & Snap Settings")]
-    [SerializeField] private float snapSpeed = 15f; // 스냅 속도를 조금 올려 더 반응성 좋게 만듭니다.
+    [SerializeField] private float snapSpeed = 15f;
     [SerializeField] private float minSwipeVelocity = 200f;
 
     [Header("Data Source")]
@@ -49,7 +49,6 @@ public class HomePanel : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDra
 
     private void InitializeScreens()
     {
-        // screenObjects[0]는 항상 중앙, [1]은 위, [2]는 아래
         screenObjects[0].anchoredPosition = new Vector2(0, 0);
         screenObjects[1].anchoredPosition = new Vector2(0, _itemHeight);
         screenObjects[2].anchoredPosition = new Vector2(0, -_itemHeight);
@@ -77,18 +76,16 @@ public class HomePanel : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDra
     public void OnEndDrag(PointerEventData eventData)
     {
         _isDragging = false;
-
+        
         float dragDuration = Time.time - _dragStartTime;
         if (dragDuration < 0.01f) dragDuration = 0.01f;
         float velocityY = (eventData.position.y - _beginDragPointerPos.y) / dragDuration;
 
         float currentY = contentRect.anchoredPosition.y;
         
-        // 1: 위로 이동 (다음), -1: 아래로 이동 (이전), 0: 제자리
-        int direction = 0; 
-
-        // [방향 로직 최종 수정]
-        // 사용자가 손가락을 위로 올리면(y값 증가) -> Content가 위로 움직여야 함 (direction = 1) -> 다음 아이템
+        int direction = 0; // 1: 위로 이동 (다음), -1: 아래로 이동 (이전)
+        
+        // 방향 판단 로직
         if (velocityY > minSwipeVelocity) direction = 1;
         else if (velocityY < -minSwipeVelocity) direction = -1;
         else
@@ -97,83 +94,56 @@ public class HomePanel : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDra
             else if (currentY < -_itemHeight * 0.5f) direction = -1;
         }
         
-        _snapCoroutine = StartCoroutine(SnapAndReposition(direction));
+        _snapCoroutine = StartCoroutine(SnapAndReset(direction));
     }
     
-    private IEnumerator SnapAndReposition(int direction)
+    // ==========================================================
+    // 업데이트 속도 문제를 해결한 최종 코루틴
+    // ==========================================================
+    private IEnumerator SnapAndReset(int direction)
     {
-        // 1. 목표 위치까지 부드럽게 애니메이션
-        float targetY = direction * _itemHeight;
-        while (Mathf.Abs(contentRect.anchoredPosition.y - targetY) > 1f)
+        // 1. 스와이프가 일어났다면, '즉시' 데이터와 화면을 다음/이전 상태로 업데이트
+        if (direction != 0)
+        {
+            // 사용자가 드래그로 밀어놓은 현재 content 위치를 저장
+            float currentY = contentRect.anchoredPosition.y;
+
+            // 데이터 인덱스를 먼저 변경
+            if (direction == 1) // Content가 위로 이동 (다음 아이템을 볼 것)
+                _currentDataIndex = GetNextDataIndex(_currentDataIndex);
+            else // Content가 아래로 이동 (이전 아이템을 볼 것)
+                _currentDataIndex = GetPreviousDataIndex(_currentDataIndex);
+            
+            // 변경된 데이터 인덱스를 기준으로 화면 전체를 즉시 리셋
+            InitializeScreens();
+
+            // 중요: 화면을 리셋한 뒤, Content의 위치를 사용자가 드래그를 멈춘 위치에서 '이어지는 것처럼' 보이도록 설정
+            // 이렇게 하면 화면이 깜빡이거나 점프하는 느낌이 사라집니다.
+            contentRect.anchoredPosition = new Vector2(0, currentY - (direction * _itemHeight));
+        }
+
+        // 2. 이제 화면을 제자리(y=0)로 부드럽게 정렬하는 애니메이션만 보여줌
+        while (Mathf.Abs(contentRect.anchoredPosition.y) > 1f)
         {
             if (_isDragging) yield break;
-            contentRect.anchoredPosition = Vector2.Lerp(contentRect.anchoredPosition, new Vector2(0, targetY), Time.deltaTime * snapSpeed);
+            contentRect.anchoredPosition = Vector2.Lerp(contentRect.anchoredPosition, Vector2.zero, Time.deltaTime * snapSpeed);
             yield return null;
         }
 
-        if (_isDragging) yield break;
-        contentRect.anchoredPosition = new Vector2(0, targetY);
-
-        // 2. 스와이프가 일어났을 경우, 데이터 업데이트 및 '하나만' 재배치
-        if (direction != 0)
-        {
-            if (direction == 1) // Content가 위로 이동 (다음 아이템을 봄)
-            {
-                _currentDataIndex = GetNextDataIndex(_currentDataIndex);
-                // 맨 아래 있던 아이템(y값이 가장 작음)을 맨 위로 재활용
-                RectTransform bottomObject = FindObjectWithLowestY();
-                bottomObject.anchoredPosition += new Vector2(0, _itemHeight * 3);
-                UpdateScreenContent(bottomObject, GetNextDataIndex(_currentDataIndex));
-            }
-            else // Content가 아래로 이동 (이전 아이템을 봄)
-            {
-                _currentDataIndex = GetPreviousDataIndex(_currentDataIndex);
-                // 맨 위에 있던 아이템(y값이 가장 큼)을 맨 아래로 재활용
-                RectTransform topObject = FindObjectWithHighestY();
-                topObject.anchoredPosition -= new Vector2(0, _itemHeight * 3);
-                UpdateScreenContent(topObject, GetPreviousDataIndex(_currentDataIndex));
-            }
-        }
-
-        // 3. Content 패널의 위치를 순간이동시켜 화면이 제자리에 있는 것처럼 보이게 함
-        // 이 작업은 아이템 재배치와 동기화되어 점프 현상을 없앱니다.
-        contentRect.anchoredPosition -= new Vector2(0, targetY);
-        
+        // 3. 애니메이션 종료 후 정확한 위치로 고정
+        contentRect.anchoredPosition = Vector2.zero;
         _snapCoroutine = null;
     }
     
-    private RectTransform FindObjectWithHighestY()
-    {
-        RectTransform highest = screenObjects[0];
-        for (int i = 1; i < screenObjects.Length; i++)
-        {
-            if (screenObjects[i].anchoredPosition.y > highest.anchoredPosition.y)
-                highest = screenObjects[i];
-        }
-        return highest;
-    }
-
-    private RectTransform FindObjectWithLowestY()
-    {
-        RectTransform lowest = screenObjects[0];
-        for (int i = 1; i < screenObjects.Length; i++)
-        {
-            if (screenObjects[i].anchoredPosition.y < lowest.anchoredPosition.y)
-                lowest = screenObjects[i];
-        }
-        return lowest;
-    }
-    
+    // --- 나머지 헬퍼 메서드 (이전과 동일) ---
     private void UpdateScreenContent(RectTransform screen, int dataIndex)
     {
         ContentData data = contentDatas[dataIndex];
         ScreenContentUI ui = screen.GetComponent<ScreenContentUI>();
         if (ui != null) ui.SetContent(data);
     }
-
     private int GetNextDataIndex(int index) => (index + 1) % _itemCount;
     private int GetPreviousDataIndex(int index) => (index - 1 + _itemCount) % _itemCount;
-    
     private void OnCreateVoteButtonClick()
     {
         Debug.Log("투표 생성 버튼 클릭");
